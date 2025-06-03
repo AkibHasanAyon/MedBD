@@ -1,0 +1,60 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  margin: 0;
+}
+
+button {
+  margin: 1rem;
+}
+
+.btn {
+  background-color: var(--background-color);
+  color: white;
+  padding: .5em 1em;
+  border: none;
+  outline: none;
+  position: relative;
+  cursor: pointer;
+
+  --background-color: white;
+  --border-size: 2px;
+  --accent-color: #ccffcc;
+}
+
+.btn.btn-background-slide::before {
+  content: '';
+  position: absolute;
+  top: -34;
+  left: -159;
+  bottom: -54;
+  right: -159;
+  z-index: -1;
+  background-color: #ccffcc;
+
+  transition: transform 500ms ease-in-out;
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+.btn.btn-background-slide:hover::before,
+.btn.btn-background-slide:focus::before {
+  transform: scaleX(1);
+}
+
+.btn.btn-background-slide {
+  transition: color 300ms ease-in-out;
+  z-index: 1;
+}
+
+
+.btn.btn-background-slide:hover,
+.btn.btn-background-slide:focus {
+  color: #ccffcc;
+}

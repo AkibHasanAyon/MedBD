@@ -1,0 +1,144 @@
+*{
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    
+}
+
+.wrapper{
+   
+    padding: 1%;
+    width: 80%;
+    margin: 0 auto;
+}
+
+.wrapper2{
+    display: flex;
+}
+
+body {background-color: #e6ffe6;}
+
+.text-center{
+    text-align: center;
+}
+
+.text-black{
+    color: black;
+}
+
+.tbl-full {
+    width: 100%;  
+}
+
+.tbl-30{
+    width: 100%;
+}
+table tr th{
+    border-bottom: 1px solid black;
+    padding: 1%;
+    text-align: left;
+}
+
+table tr td{
+    padding: 1%;
+}
+
+.btn-primary{
+    background-color: rgb(111, 192, 196);
+    color: white;
+    padding: 1%;
+    text-decoration: none;
+    font-weight: bold;
+}
+.btn-primary:hover{
+    background-color: rgb(5, 84, 113);
+}
+
+.btn-secondary{
+    background-color: lightgreen;
+    color: white;
+    padding: 1%;
+    text-decoration: none;
+    font-weight: bold;
+}
+.btn-secondary:hover{
+    background-color: green;
+}
+
+.btn-danger{
+    background-color: lightcoral;
+    color: white;
+    padding: 1%;
+    text-decoration: none;
+    font-weight: bold;
+}
+.btn-danger:hover{
+    background-color: red;
+}
+.success{
+    color: lightgreen ;
+}
+.error{
+    color: rgb(228, 55, 55);
+}
+
+/*menu*/
+.menu{
+    text-align: center;
+    border-bottom: 1px solid gray;
+}
+.menu .wrapper ul li{
+        list-style-type: none;
+        display: inline;
+        padding: 1%;
+}
+.menu .wrapper ul li a{
+    text-decoration: none;
+    font-weight: 700;
+    color: rgb(2, 4, 4);
+}
+
+.menu .wrapper ul li a:hover{
+    color: rgb(110, 216, 216);
+}
+
+/* main */
+
+.main-content{
+    
+    background-color: aliceblue;
+    padding: 3% 0;
+}
+.col-4{
+    width: 20%;
+    background-color: white;
+    margin: 1%;
+    padding: 2%;
+    /* float: left; */
+    
+}
+
+.footer{
+    background-color: #0dd0b3;
+    color: white;
+}
+
+.cn{
+    text-decoration: none;
+    color: white;
+    font-weight: 600;
+}
+
+/* css for login */
+
+.login{
+
+   background-color: #e6ffe6;
+    border: 1px solid grey;
+    width: 20%;
+    margin: 10% auto;
+    padding: 2%;
+}
+
+
+
