@@ -1,0 +1,265 @@
+/* ==========================================
+   Customer Auth & Account Pages
+   ========================================== */
+
+/* --- Auth Forms (Login / Register) --- */
+.auth-section {
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    background: linear-gradient(135deg, #e8f5e9 0%, #e0f2f1 100%);
+}
+
+.auth-form-container {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(21, 94, 88, 0.12);
+    padding: 40px;
+    width: 100%;
+    max-width: 480px;
+}
+
+.auth-form-container h2 {
+    color: #155e58;
+    font-size: 28px;
+    margin-bottom: 8px;
+    text-align: center;
+}
+
+.auth-form-container .auth-subtitle {
+    color: #777;
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 14px;
+}
+
+.auth-form-container .form-group {
+    margin-bottom: 20px;
+}
+
+.auth-form-container .form-group label {
+    display: block;
+    color: #333;
+    font-weight: 600;
+    margin-bottom: 6px;
+    font-size: 14px;
+}
+
+.auth-form-container .form-group input,
+.auth-form-container .form-group textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 15px;
+    transition: border-color 0.3s ease;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.auth-form-container .form-group input:focus,
+.auth-form-container .form-group textarea:focus {
+    border-color: #15c293;
+}
+
+.auth-form-container .btn-auth {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #155e58, #15c293);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    margin-top: 10px;
+}
+
+.auth-form-container .btn-auth:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(21, 194, 147, 0.35);
+}
+
+.auth-form-container .auth-link {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
+    color: #777;
+}
+
+.auth-form-container .auth-link a {
+    color: #155e58;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.auth-form-container .auth-link a:hover {
+    color: #15c293;
+}
+
+/* --- Session Messages --- */
+.auth-message {
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    text-align: center;
+}
+
+.auth-message.success {
+    background: #e8f5e9;
+    color: #2e7d32;
+    border: 1px solid #a5d6a7;
+}
+
+.auth-message.error {
+    background: #ffebee;
+    color: #c62828;
+    border: 1px solid #ef9a9a;
+}
+
+/* --- Profile Page --- */
+.profile-section {
+    padding: 40px 20px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.profile-section h2 {
+    color: #155e58;
+    font-size: 28px;
+    margin-bottom: 30px;
+    border-bottom: 3px solid #15c293;
+    padding-bottom: 10px;
+}
+
+.profile-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    padding: 30px;
+    margin-bottom: 30px;
+}
+
+.profile-card h3 {
+    color: #155e58;
+    font-size: 20px;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.profile-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.profile-info .info-item {
+    margin-bottom: 10px;
+}
+
+.profile-info .info-item label {
+    display: block;
+    color: #888;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+}
+
+.profile-info .info-item span {
+    color: #333;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+/* --- Cart Badge --- */
+.cart-badge {
+    display: inline-block;
+    background: #e74c3c;
+    color: #fff;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    text-align: center;
+    line-height: 20px;
+    margin-left: 4px;
+    vertical-align: top;
+}
+
+/* --- Order History Table --- */
+.order-history-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.order-history-table th,
+.order-history-table td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+}
+
+.order-history-table th {
+    background: #f5f5f5;
+    color: #155e58;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 1px;
+}
+
+.order-history-table tr:hover {
+    background: #f9fffe;
+}
+
+/* Status Badges */
+.status-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.status-ordered {
+    background: #fff3e0;
+    color: #e65100;
+}
+
+.status-shipped,
+.status-on-delivery {
+    background: #e3f2fd;
+    color: #1565c0;
+}
+
+.status-delivered {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+.status-cancelled {
+    background: #ffebee;
+    color: #c62828;
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+    .profile-info {
+        grid-template-columns: 1fr;
+    }
+
+    .auth-form-container {
+        padding: 24px;
+        margin: 0 10px;
+    }
+}

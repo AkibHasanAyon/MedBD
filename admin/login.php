@@ -61,28 +61,50 @@
 //Check whether the submit button is clicked or not
 if (isset($_POST['submit'])) {
     //Process for login
-    //1. Get the Data from login from
+    //1. Get the Data from login form
     $username = mysqli_real_escape_string($conn, $_POST['username']);
-    $password = md5(mysqli_real_escape_string($conn, $_POST['password']));
+    $raw_password = $_POST['password'];
 
-    //2. SQL to check whether the user with username and password exists or not
-    $sql = "SELECT * FROM tbl_admin WHERE username = '$username' AND password = '$password'";
+    //2. SQL to get the admin by username only (password checked in PHP)
+    $sql = "SELECT * FROM tbl_admin WHERE username = '$username'";
 
     //3. Execute the query
-
     $res = mysqli_query($conn, $sql);
 
     //4. Count rows to check whether the user exists or not
     $count = mysqli_num_rows($res);
 
     if ($count == 1) {
+        $row = mysqli_fetch_assoc($res);
+        $stored_password = $row['password'];
+        $login_success = false;
 
-        //User Available and login success
-        $_SESSION['login'] = "<div class='success'> Login Successful. </div>";
-        $_SESSION['user'] = $username; // To check whether the user is logged in or not and logout will unset it.
+        // Try bcrypt first (new format)
+        if (password_verify($raw_password, $stored_password)) {
+            $login_success = true;
+        }
+        // Fallback: try MD5 (legacy format) and upgrade if matched
+        elseif (md5($raw_password) === $stored_password) {
+            $login_success = true;
+            // Upgrade the password to bcrypt
+            $new_hash = password_hash($raw_password, PASSWORD_BCRYPT);
+            $upgrade_sql = "UPDATE tbl_admin SET password='" . mysqli_real_escape_string($conn, $new_hash) . "' WHERE id=" . (int)$row['id'];
+            mysqli_query($conn, $upgrade_sql);
+        }
 
-        // Redirect to home page
-        header('Location:'.SITEURL.'admin/');
+        if ($login_success) {
+            //User Available and login success
+            $_SESSION['login'] = "<div class='success'> Login Successful. </div>";
+            $_SESSION['user'] = $username; // To check whether the user is logged in or not and logout will unset it.
+
+            // Redirect to home page
+            header('Location:'.SITEURL.'admin/');
+        } else {
+            //Wrong password
+            $_SESSION['login'] = "<div class='error text-center'> Username or Password didnot matched. Try again. </div>";
+            // Redirect to login page
+            header('Location:'.SITEURL.'admin/login.php');
+        }
     } else {
 
         //User Not Available

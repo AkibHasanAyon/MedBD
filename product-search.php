@@ -72,14 +72,35 @@
             </div>
 
             <div class="product-menu-desc">
-                <h4><?php echo $title;?></h4>
-                <p class="product-price">$<?php echo $price;?></p>
+                <a href="<?php echo SITEURL; ?>product-detail.php?id=<?php echo $id; ?>" style="text-decoration:none;">
+                    <h4 style="color:#155e58;"><?php echo $title;?></h4>
+                </a>
+                
+                <?php
+                    // Get average rating
+                    $rate_sql = "SELECT AVG(rating) as avg_rate FROM tbl_review WHERE product_id=$id";
+                    $rate_res = mysqli_query($conn, $rate_sql);
+                    $rate_row = mysqli_fetch_assoc($rate_res);
+                    $avg_rate = $rate_row['avg_rate'] ? round($rate_row['avg_rate'], 1) : 0;
+                ?>
+                <div style="color: #ffb300; font-size: 14px; margin-bottom: 5px;">
+                    <?php 
+                        for($i=1; $i<=5; $i++) {
+                            if ($i <= round($avg_rate)) echo "★";
+                            else echo "☆";
+                        }
+                    ?>
+                    <span style="color:#888; font-size:12px;">(<?php echo $avg_rate; ?>)</span>
+                </div>
+
+                <p class="product-price">৳ <?php echo $price;?></p>
                 <p class="product-detail">
                     <?php echo $description;?>
                 </p>
                 <br>
 
-                <a href="<?php echo SITEURL; ?>order.php?product_id=<?php echo $id; ?>" class="btn btn-primary">Order Now</a>
+                <a href="<?php echo SITEURL; ?>add-to-cart.php?product_id=<?php echo $id; ?>" class="btn btn-primary" style="background:#155e58; border:none; margin-right:5px;">Add to Cart</a>
+                <a href="<?php echo SITEURL; ?>order.php?product_id=<?php echo $id; ?>" class="btn btn-primary">Buy Now</a>
             </div>
         </div>
 

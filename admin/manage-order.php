@@ -22,15 +22,17 @@
 
         <table class="tbl-full">
             <tr>
-                <th>S.N</th>
+                <th>S.N.</th>
                 <th>Product</th>
                 <th>Price</th>
                 <th>Qty.</th>
                 <th>Total</th>
                 <th>Order Date</th>
                 <th>Status</th>
+                <th>Payment</th>
+                <th>Prescription</th>
                 <th>Customer Name</th>
-                <th>Customer Contact</th>
+                <th>Contact</th>
                 <th>Email</th>
                 <th>Address</th>
                 <th>Actions</th>
@@ -62,6 +64,9 @@
                    $total=$row['total'];
                    $order_date=$row['order_date'];
                    $status=$row['status'];
+                   $payment_method = $row['payment_method'];
+                   $payment_status = $row['payment_status'];
+                   $prescription_image = $row['prescription_image'];
                    $customer_name=$row['customer_name'];
                    $customer_contact=$row['customer_contact'];
                    $customer_email=$row['customer_email'];
@@ -71,7 +76,7 @@
                    ?>
 
             <tr>
-                <td><?php echo $sn++; ?></td>
+                <td><?php echo $sn++; ?>. </td>
                 <td><?php echo $product; ?></td>
                 <td><?php echo $price; ?></td>
                 <td><?php echo $qty; ?></td>
@@ -99,6 +104,23 @@
                          }
                       ?>
                 </td>
+
+                <td>
+                    <?php echo $payment_method; ?><br>
+                    <?php 
+                        if($payment_status == 'Paid') echo "<span style='color:green;font-size:12px;'>(Paid)</span>";
+                        else echo "<span style='color:red;font-size:12px;'>(Pending)</span>";
+                    ?>
+                </td>
+
+                <td>
+                    <?php if($prescription_image != ""): ?>
+                        <a href="<?php echo SITEURL; ?>images/prescription/<?php echo $prescription_image; ?>" target="_blank" style="color:#155e58; text-decoration:underline;">View Image</a>
+                    <?php else: ?>
+                        <span style="color:#888;">N/A</span>
+                    <?php endif; ?>
+                </td>
+
                 <td><?php echo $customer_name; ?></td>
                 <td><?php echo $customer_contact; ?></td>
                 <td><?php echo $customer_email; ?></td>
@@ -121,7 +143,7 @@
                else
                {
                  //order Not Available
-                 echo "<tr><td colspan='12' class='error'>Orders Not Available</td></tr>";
+                 echo "<tr><td colspan='14' class='error'>Orders Not Available</td></tr>";
                }
 
            ?>

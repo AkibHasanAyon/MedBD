@@ -22,26 +22,31 @@
         <a href="#">Delivery information</a>
         <a href="#">Privacy Policy</a>
         <a href="#">Terms & Conditions</a>
-        <a href="#">Contact Us</a>
+        <a href="<?php echo SITEURL; ?>contact.php">Contact Us</a>
     </div>
     <div class="col">
         <h4>My Account</h4>
-        <a href="#">Sign In</a>
-        <a href="#">View Cart</a>
-        <a href="#">My Wishlist</a>
-        <a href="#">Track My Order</a>
-        <a href="#">Help</a>
+        <?php if(isset($_SESSION['customer_id'])): ?>
+            <a href="<?php echo SITEURL; ?>customer/profile.php">My Profile</a>
+            <a href="<?php echo SITEURL; ?>cart.php">View Cart</a>
+            <a href="<?php echo SITEURL; ?>wishlist.php">My Wishlist</a>
+            <a href="<?php echo SITEURL; ?>customer/my-orders.php">Track My Order</a>
+            <a href="<?php echo SITEURL; ?>customer/logout.php">Logout</a>
+        <?php else: ?>
+            <a href="<?php echo SITEURL; ?>customer/login.php">Sign In</a>
+            <a href="<?php echo SITEURL; ?>customer/register.php">Register</a>
+        <?php endif; ?>
     </div>
 
     <div class="col install">
         <h4>Install App</h4>
         <p>From App Store or Google Play</p>
         <div class="row">
-            <img src="images/pay/app.jpg" alt="">
-            <img src="images/pay/play.jpg" alt="">
+            <img src="<?php echo SITEURL; ?>images/pay/app.jpg" alt="">
+            <img src="<?php echo SITEURL; ?>images/pay/play.jpg" alt="">
         </div>
         <p>Secure Payment Gateways</p>
-        <img src="images/pay/pay2.png" alt="">
+        <img src="<?php echo SITEURL; ?>images/pay/pay2.png" alt="">
     </div>
     <div class="copyright">
         <p> Copyright &copy;-2022 All rights reserved by MedBD</p>

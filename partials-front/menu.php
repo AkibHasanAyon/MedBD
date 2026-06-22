@@ -1,4 +1,4 @@
-﻿<?php include('config/constants.php'); ?>
+<?php include(__DIR__ . '/../config/constants.php'); ?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -10,8 +10,9 @@
     <title>MEDbd</title>
 
     <!-- Link our CSS file -->
-    <link rel="stylesheet" href="css/style.css?v=<?php echo time(); ?>">
-    <link rel="stylesheet" href="css/style2.css?v=<?php echo time(); ?>">
+    <link rel="stylesheet" href="<?php echo SITEURL; ?>css/style.css?v=<?php echo time(); ?>">
+    <link rel="stylesheet" href="<?php echo SITEURL; ?>css/style2.css?v=<?php echo time(); ?>">
+    <link rel="stylesheet" href="<?php echo SITEURL; ?>css/customer.css?v=<?php echo time(); ?>">
     <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
 
 
@@ -22,8 +23,8 @@
     <section class="navbar">
         <div class="container">
             <div class="logo">
-                <a href="#" title="Logo">
-                    <img src="images/MedBdLogo.png?v=<?php echo time();?>" alt="MEDbd Logo" class="img-responsive">
+                <a href="<?php echo SITEURL; ?>" title="Logo">
+                    <img src="<?php echo SITEURL; ?>images/MedBdLogo.png?v=<?php echo time();?>" alt="MEDbd Logo" class="img-responsive">
                 </a>
             </div>
 
@@ -106,6 +107,40 @@
          
   </div>
 </div>
+
+<!-- Customer Account Links -->
+<div class="dropdown">
+  <?php if(isset($_SESSION['customer_id'])): ?>
+    <button class="dropbtn"><i class='bx bxs-user-circle'></i> <?php echo htmlspecialchars($_SESSION['customer_name']); ?></button>
+    <div class="dropdown-content">
+        <a href="<?php echo SITEURL; ?>customer/profile.php">My Profile</a>
+        <a href="<?php echo SITEURL; ?>customer/my-orders.php">My Orders</a>
+        <a href="<?php echo SITEURL; ?>wishlist.php">Wishlist</a>
+        <a href="<?php echo SITEURL; ?>cart.php">Cart
+            <?php
+                // Show cart count badge
+                if(isset($_SESSION['customer_id'])){
+                    $cart_sql = "SELECT SUM(qty) as total_items FROM tbl_cart WHERE customer_id=".(int)$_SESSION['customer_id'];
+                    $cart_res = mysqli_query($conn, $cart_sql);
+                    $cart_row = mysqli_fetch_assoc($cart_res);
+                    $cart_count = $cart_row['total_items'] ? $cart_row['total_items'] : 0;
+                    if($cart_count > 0){
+                        echo "<span class='cart-badge'>$cart_count</span>";
+                    }
+                }
+            ?>
+        </a>
+        <a href="<?php echo SITEURL; ?>customer/logout.php">Logout</a>
+    </div>
+  <?php else: ?>
+    <button class="dropbtn"><i class='bx bxs-user'></i> Account</button>
+    <div class="dropdown-content">
+        <a href="<?php echo SITEURL; ?>customer/login.php">Login</a>
+        <a href="<?php echo SITEURL; ?>customer/register.php">Register</a>
+    </div>
+  <?php endif; ?>
+</div>
+
             </div>
 
             <div class="clearfix"></div>

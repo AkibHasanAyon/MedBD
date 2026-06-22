@@ -42,36 +42,57 @@
             Products
         </div>
         <div class="col-4 text-center">
+            
             <?php 
-            //sql query
-               $sql3="SELECT * FROM tbl_order";
-                //execute query
-                $res3=mysqli_query($conn,$sql3);
-                //count rows
-                $count3=mysqli_num_rows($res3);
+                //Sql Query 
+                $sql3 = "SELECT * FROM tbl_order";
+                //Execute Query
+                $res3 = mysqli_query($conn, $sql3);
+                //Count Rows
+                $count3 = mysqli_num_rows($res3);
+            ?>
 
-             ?>
             <h1><?php echo $count3; ?></h1>
-            <br>
+            <br />
             Total Orders
         </div>
+
         <div class="col-4 text-center">
+            
             <?php 
-            //Aggregate function in sql
-               $sql4="SELECT SUM(total) AS Total FROM tbl_order 
-            --    WHERE status='Delivered'
-               ";
-                //execute query
-                $res4=mysqli_query($conn,$sql4);
-                //Get the value
-                $row4=mysqli_fetch_assoc($res4);
+                //Sql Query 
+                $sql_cust = "SELECT * FROM tbl_customer";
+                //Execute Query
+                $res_cust = mysqli_query($conn, $sql_cust);
+                //Count Rows
+                $count_cust = mysqli_num_rows($res_cust);
+            ?>
 
-                //Get the total revenue
-                $total_revenue=$row4['Total'];
+            <h1><?php echo $count_cust; ?></h1>
+            <br />
+            Total Customers
+        </div>
 
-             ?>
+        <div class="col-4 text-center">
+            
+            <?php 
+                //Creat SQL Query to Get Total Revenue Generated
+                //Aggregate Function in SQL
+                $sql4 = "SELECT SUM(total) AS Total FROM tbl_order WHERE status='Delivered'";
+
+                //Execute the Query
+                $res4 = mysqli_query($conn, $sql4);
+
+                //Get the VAlue
+                $row4 = mysqli_fetch_assoc($res4);
+                
+                //GEt the Total REvenue
+                $total_revenue = $row4['Total'] ? $row4['Total'] : 0;
+
+            ?>
+
             <h1>৳<?php echo $total_revenue; ?></h1>
-            <br>
+            <br />
             Revenue Generated
         </div>
         <!-- <div class="clearfix"></div> -->
