@@ -7,18 +7,18 @@ if (!isset($_SESSION['customer_id'])) {
 }
 
 if (isset($_POST['submit'])) {
-    $customer_id = (int)$_SESSION['customer_id'];
+    $customer_id = (int) $_SESSION['customer_id'];
     $customer_name = mysqli_real_escape_string($conn, $_POST['customer_name']);
     $customer_contact = mysqli_real_escape_string($conn, $_POST['customer_contact']);
     $customer_email = mysqli_real_escape_string($conn, $_POST['customer_email']);
     $customer_address = mysqli_real_escape_string($conn, $_POST['customer_address']);
     $payment_method = mysqli_real_escape_string($conn, $_POST['payment_method']);
-    
-    $is_cart = (int)$_POST['is_cart'];
+
+    $is_cart = (int) $_POST['is_cart'];
     $order_date = date("Y-m-d H:i:s");
     $status = "Ordered";
     $payment_status = "Pending";
-    
+
     // Handle prescription upload
     $prescription_name = "";
     if (isset($_FILES['prescription']['name']) && $_FILES['prescription']['name'] != "") {
@@ -27,12 +27,12 @@ if (isset($_POST['submit'])) {
         $prescription_name = "Prescription_" . rand(0000, 9999) . "." . $ext;
         $src = $_FILES['prescription']['tmp_name'];
         $dst = "images/prescription/" . $prescription_name;
-        
+
         // Ensure directory exists
         if (!is_dir("images/prescription")) {
             mkdir("images/prescription", 0777, true);
         }
-        
+
         $upload = move_uploaded_file($src, $dst);
         if ($upload == false) {
             $_SESSION['order-error'] = "<div class='error'>Failed to upload prescription. Please try again.</div>";
@@ -52,7 +52,7 @@ if (isset($_POST['submit'])) {
             $total_amount += ($row['price'] * $row['qty']);
         }
     } else {
-        $product_id = (int)$_POST['product_id'];
+        $product_id = (int) $_POST['product_id'];
         $sql = "SELECT id as product_id, title, price FROM tbl_product WHERE id=$product_id";
         $res = mysqli_query($conn, $sql);
         if ($row = mysqli_fetch_assoc($res)) {
@@ -71,11 +71,11 @@ if (isset($_POST['submit'])) {
     $order_ids = [];
     foreach ($items as $item) {
         $product = mysqli_real_escape_string($conn, $item['title']);
-        $product_id = (int)$item['product_id'];
+        $product_id = (int) $item['product_id'];
         $price = $item['price'];
         $qty = $item['qty'];
         $total = $price * $qty;
-        
+
         $insert_sql = "INSERT INTO tbl_order SET
             customer_id=$customer_id,
             product_id=$product_id,
@@ -93,7 +93,7 @@ if (isset($_POST['submit'])) {
             customer_email='$customer_email',
             customer_address='$customer_address'
         ";
-        
+
         if (mysqli_query($conn, $insert_sql)) {
             $order_ids[] = mysqli_insert_id($conn);
         } else {
