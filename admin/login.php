@@ -1,61 +1,118 @@
 <?php include('../config/constants.php'); ?>
 
-<html>
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <link rel="stylesheet" href="../css/adminstyle.css">
-    <title>Login - Product Order System</title>
-    <link rel="stylesheet" href="../css/admin.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedBD Admin Login</title>
+    <link rel="stylesheet" href="../css/admin.css?v=<?php echo time(); ?>">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        body {
+            background-color: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .login-card {
+            background: var(--white);
+            padding: 40px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-md);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        .login-header {
+            margin-bottom: 30px;
+        }
+        .login-header h2 {
+            color: var(--primary);
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        .login-header p {
+            color: var(--text-muted);
+            font-size: 15px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 15px;
+            transition: all 0.3s;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-light);
+        }
+        .btn-login {
+            background: var(--primary);
+            color: var(--white);
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+        .btn-login:hover {
+            background: var(--primary-hover);
+        }
+    </style>
 </head>
-
 <body>
 
-    <div class="login">
-        <h1 class="text-center">Login</h1>
-        <br> <br>
+    <div class="login-card">
+        <div class="login-header">
+            <h2>MEDbd</h2>
+            <p>Admin Control Panel</p>
+        </div>
 
         <?php
         if (isset($_SESSION['login'])) {
             echo $_SESSION['login'];
             unset($_SESSION['login']);
         }
-
         if (isset($_SESSION['no-login-message'])) {
             echo $_SESSION['no-login-message'];
             unset($_SESSION['no-login-message']);
         }
         ?>
-        <br> <br>
 
-        <!-- login form starts here -->
-        <form action="" method="POST" class="text-center">
-            Username: <br>
-            <input type="text" name="username" placeholder="Enter Username"> <br> <br>
-
-            Password: <br>
-            <input type="password" name="password" placeholder="Enter Password"> <br> <br>
-
-           
-           
-             <button class="btn btn-background-slide"> <input type=submit name=submit value=Login </button>
-
-            <br> <br>
+        <form action="" method="POST">
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" name="username" placeholder="Enter Username" required>
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" name="password" placeholder="Enter Password" required>
+            </div>
+            <button type="submit" name="submit" class="btn-login">Login to Dashboard</button>
         </form>
-      
-
     </div>
-    
-        
 
 </body>
-
 </html>
-
-
-
 <?php
 
 //Check whether the submit button is clicked or not

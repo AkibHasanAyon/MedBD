@@ -1,103 +1,83 @@
 <?php include('partials/menu.php') ?>
 <!-- main -->
-<div class="main-content">
-
-    <div class="wrapper wrapper2">
-        <h1 style="padding-top: 50px">DASHBOARD</h1>
-        <br><br><br><br>
+    <div class="wrapper">
+        <h1 class="page-title">Dashboard Overview</h1>
 
         <?php
             if(isset($_SESSION['login'])){
-                echo $_SESSION['login'];
+                echo "<div class='success'>" . $_SESSION['login'] . "</div>";
                 unset($_SESSION['login']);
             }
         ?>
-        <br><br>
-        <div class="col-4 text-center">
-            <?php 
-            //sql query
-               $sql="SELECT * FROM tbl_category";
-                //execute query
-                $res=mysqli_query($conn,$sql);
-                //count rows
-                $count=mysqli_num_rows($res);
+        
+        <div class="dashboard-grid">
+            <div class="stat-card">
+                <div class="stat-icon"><i class='bx bx-category'></i></div>
+                <div class="stat-details">
+                    <?php 
+                       $sql="SELECT * FROM tbl_category";
+                       $res=mysqli_query($conn,$sql);
+                       $count=mysqli_num_rows($res);
+                    ?>
+                    <h1><?php echo $count; ?></h1>
+                    <span>Total Categories</span>
+                </div>
+            </div>
 
-             ?>
-            <h1><?php echo $count; ?></h1>
-            <br>
-            Category
+            <div class="stat-card">
+                <div class="stat-icon"><i class='bx bx-package'></i></div>
+                <div class="stat-details">
+                    <?php 
+                       $sql2="SELECT * FROM tbl_product";
+                       $res2=mysqli_query($conn,$sql2);
+                       $count2=mysqli_num_rows($res2);
+                    ?>
+                    <h1><?php echo $count2; ?></h1>
+                    <span>Total Products</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon"><i class='bx bx-cart'></i></div>
+                <div class="stat-details">
+                    <?php 
+                        $sql3 = "SELECT * FROM tbl_order";
+                        $res3 = mysqli_query($conn, $sql3);
+                        $count3 = mysqli_num_rows($res3);
+                    ?>
+                    <h1><?php echo $count3; ?></h1>
+                    <span>Total Orders</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon"><i class='bx bx-group'></i></div>
+                <div class="stat-details">
+                    <?php 
+                        $sql_cust = "SELECT * FROM tbl_customer";
+                        $res_cust = mysqli_query($conn, $sql_cust);
+                        $count_cust = mysqli_num_rows($res_cust);
+                    ?>
+                    <h1><?php echo $count_cust; ?></h1>
+                    <span>Total Customers</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon"><i class='bx bx-money'></i></div>
+                <div class="stat-details">
+                    <?php 
+                        $sql4 = "SELECT SUM(total) AS Total FROM tbl_order WHERE status='Delivered'";
+                        $res4 = mysqli_query($conn, $sql4);
+                        $row4 = mysqli_fetch_assoc($res4);
+                        $total_revenue = $row4['Total'] ? $row4['Total'] : 0;
+                    ?>
+                    <h1>৳<?php echo number_format($total_revenue, 2); ?></h1>
+                    <span>Revenue Generated</span>
+                </div>
+            </div>
         </div>
-        <div class="col-4 text-center">
-            <?php 
-            //sql query
-               $sql2="SELECT * FROM tbl_product";
-                //execute query
-                $res2=mysqli_query($conn,$sql2);
-                //count rows
-                $count2=mysqli_num_rows($res2);
-
-             ?>
-            <h1><?php echo $count2; ?></h1>
-            <br>
-            Products
-        </div>
-        <div class="col-4 text-center">
-            
-            <?php 
-                //Sql Query 
-                $sql3 = "SELECT * FROM tbl_order";
-                //Execute Query
-                $res3 = mysqli_query($conn, $sql3);
-                //Count Rows
-                $count3 = mysqli_num_rows($res3);
-            ?>
-
-            <h1><?php echo $count3; ?></h1>
-            <br />
-            Total Orders
-        </div>
-
-        <div class="col-4 text-center">
-            
-            <?php 
-                //Sql Query 
-                $sql_cust = "SELECT * FROM tbl_customer";
-                //Execute Query
-                $res_cust = mysqli_query($conn, $sql_cust);
-                //Count Rows
-                $count_cust = mysqli_num_rows($res_cust);
-            ?>
-
-            <h1><?php echo $count_cust; ?></h1>
-            <br />
-            Total Customers
-        </div>
-
-        <div class="col-4 text-center">
-            
-            <?php 
-                //Creat SQL Query to Get Total Revenue Generated
-                //Aggregate Function in SQL
-                $sql4 = "SELECT SUM(total) AS Total FROM tbl_order WHERE status='Delivered'";
-
-                //Execute the Query
-                $res4 = mysqli_query($conn, $sql4);
-
-                //Get the VAlue
-                $row4 = mysqli_fetch_assoc($res4);
-                
-                //GEt the Total REvenue
-                $total_revenue = $row4['Total'] ? $row4['Total'] : 0;
-
-            ?>
-
-            <h1>৳<?php echo $total_revenue; ?></h1>
-            <br />
-            Revenue Generated
-        </div>
-        <!-- <div class="clearfix"></div> -->
     </div>
-</div>
 <!-- footer -->
 
 

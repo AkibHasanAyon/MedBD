@@ -1,122 +1,76 @@
 <?php include('partials/menu.php');?>
 
-<div class="main-content">
     <div class="wrapper">
-        <h1>Add Product</h1>
-
-        <br><br>
+        <h1 class="page-title">Add Product</h1>
 
         <?php
         ob_start();
-            if(isset($_SESSION['upload']))
-            {
-                echo $_SESSION['upload'];
-                unset($_SESSION['upload']);
-            }     
-        
-        if(isset($_SESSION['add']))
-        {
-            echo $_SESSION['add'];
-            unset($_SESSION['add']);
-        }
-    ?>
+        if(isset($_SESSION['upload'])) { echo $_SESSION['upload']; unset($_SESSION['upload']); }     
+        if(isset($_SESSION['add'])) { echo $_SESSION['add']; unset($_SESSION['add']); }
+        ?>
 
-        <form action="" method="POST" enctype='multipart/form-data'>
-
-            <table class="tbl-30">
-                <tr>
-                    <td>Title: </td>
-                    <td><input type="text" name="title" placeholder="Title of the Product"></td>
-                </tr>
-
-                <tr>
-                    <td>Description: </td>
-                    <td><textarea name="description" cols="30" rows="5"
-                            placeholder="Description of the page"></textarea>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>Price: </td>
-                    <td><input type="number" name="price"></td>
-                </tr>
-
-                <tr>
-                    <td>Select Image: </td>
-                    <td>
-                        <input type="file" name="image">
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>Category: </td>
-                    <td>
-                        <select name="category">
-
-                            <?php
-                                //create sql code to display category from data base
-                                //1.create sql to get all active from database
-                                $sql = "SELECT * FROM tbl_category WHERE active='Yes'";
-
-                                //execute query
-                                $res = mysqli_query($conn, $sql);
-
-                                //count rows whether we have categories or not
-                                $count = mysqli_num_rows($res);
-
-                                //if count is greater then zero we have categories
-                                if($count > 0)
-                                {
-                                    // we have categories
-                                    while($row=mysqli_fetch_assoc($res))
-                                    {
-                                        $id = $row['id'];
-                                        $title = $row['title'];
-                                        ?>
-
-                            <option value="<?php echo $id; ?>"><?php echo $title; ?></option>
-
-                            <?php
-                                    } 
-                                }
-                                else
-                                {
-                                    // we don't have categories
-                                    ?>
-                            <option value="0">No Category Found</option>
-                            <?php
-                                }
-
-                                //2.Display a dropdown
-                            ?>
-                        </select>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>Featured: </td>
-                    <td>
-                        <input type="radio" name="featured" value="Yes">Yes
-                        <input type="radio" name="featured" value="No">No
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>Active: </td>
-                    <td>
-                        <input type="radio" name="active" value="Yes">Yes
-                        <input type="radio" name="active" value="No">No
-                    </td>
-                </tr>
-
-                <tr>
-                    <td colspan="2">
-                        <input type="submit" name="submit" value="Add Product" class="btn-secondary">
-                    </td>
-                </tr>
-            </table>
-        </form>
-        <!-- Add product form  ends -->
+        <div class="form-container">
+            <form action="" method="POST" enctype='multipart/form-data'>
+                <table class="tbl-30">
+                    <tr>
+                        <td>Title</td>
+                        <td><input type="text" name="title" placeholder="Product Title" required></td>
+                    </tr>
+                    <tr>
+                        <td style="vertical-align: top; padding-top: 20px;">Description</td>
+                        <td><textarea name="description" cols="30" rows="4" placeholder="Product Description"></textarea></td>
+                    </tr>
+                    <tr>
+                        <td>Price (৳)</td>
+                        <td><input type="number" name="price" step="0.01" required></td>
+                    </tr>
+                    <tr>
+                        <td>Product Image</td>
+                        <td><input type="file" name="image" accept="image/*"></td>
+                    </tr>
+                    <tr>
+                        <td>Category</td>
+                        <td>
+                            <select name="category">
+                                <?php
+                                    $sql = "SELECT * FROM tbl_category WHERE active='Yes'";
+                                    $res = mysqli_query($conn, $sql);
+                                    $count = mysqli_num_rows($res);
+                                    if($count > 0) {
+                                        while($row=mysqli_fetch_assoc($res)) {
+                                            $id = $row['id'];
+                                            $title = $row['title'];
+                                            echo "<option value='$id'>$title</option>";
+                                        } 
+                                    } else {
+                                        echo "<option value='0'>No Category Found</option>";
+                                    }
+                                ?>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Featured</td>
+                        <td>
+                            <label style="margin-right: 15px;"><input type="radio" name="featured" value="Yes"> Yes</label>
+                            <label><input type="radio" name="featured" value="No" checked> No</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Active</td>
+                        <td>
+                            <label style="margin-right: 15px;"><input type="radio" name="active" value="Yes" checked> Yes</label>
+                            <label><input type="radio" name="active" value="No"> No</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="padding-top: 25px;">
+                            <button type="submit" name="submit" class="btn-primary" style="width: 100%;"><i class='bx bx-plus-circle'></i> Add Product</button>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
 
         <?php
            

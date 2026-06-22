@@ -2,153 +2,82 @@
 
 
 
-<div class="main-content">
-    <div class="wrapper ">
+    <div class="wrapper">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+            <h1 class="page-title" style="margin-bottom: 0;">Manage Categories</h1>
+            <a href="<?php echo SITEURL; ?>admin/add-category.php" class="btn-primary"><i class='bx bx-plus'></i> Add Category</a>
+        </div>
 
-        <h1>Manage Category</h1>
-
-        <!-- <div class="clearfix"></div> -->
-        <br><br>
         <?php
-        
-            if(isset($_SESSION['add']))
-            {
-                echo $_SESSION['add'];
-                unset($_SESSION['add']);
-            }
-            
-            if(isset($_SESSION['upload']))
-            {
-                echo $_SESSION['upload'];
-                unset($_SESSION['upload']);
-            }
-            if(isset($_SESSION['remove']))
-            {
-                echo $_SESSION['remove'];
-                unset($_SESSION['remove']);
-            }
-            if(isset($_SESSION['delete']))
-            {
-                echo $_SESSION['delete'];
-                unset($_SESSION['delete']);
-            }
-            if(isset($_SESSION['no-category-found']))
-            {
-                echo $_SESSION['no-category-found'];
-                unset($_SESSION['no-category-found']);
-            }
-            if(isset($_SESSION['update']))
-            {
-                echo $_SESSION['update'];
-                unset($_SESSION['update']);
-            }
-            if(isset($_SESSION['upload']))
-            {
-                echo $_SESSION['upload'];
-                unset($_SESSION['upload']);
-            }
-            if(isset($_SESSION['failed-remove']))
-            {
-                echo $_SESSION['failed-remove'];
-                unset($_SESSION['failed-remove']);
-            }
-        
+            if(isset($_SESSION['add'])) { echo $_SESSION['add']; unset($_SESSION['add']); }
+            if(isset($_SESSION['upload'])) { echo $_SESSION['upload']; unset($_SESSION['upload']); }
+            if(isset($_SESSION['remove'])) { echo $_SESSION['remove']; unset($_SESSION['remove']); }
+            if(isset($_SESSION['delete'])) { echo $_SESSION['delete']; unset($_SESSION['delete']); }
+            if(isset($_SESSION['no-category-found'])) { echo $_SESSION['no-category-found']; unset($_SESSION['no-category-found']); }
+            if(isset($_SESSION['update'])) { echo $_SESSION['update']; unset($_SESSION['update']); }
+            if(isset($_SESSION['failed-remove'])) { echo $_SESSION['failed-remove']; unset($_SESSION['failed-remove']); }
         ?>
-        <br><br>
-        <br>
-        <a href="<?php echo SITEURL; ?>admin/add-category.php" class="btn-primary">Add Category</a>
-        <br> <br> <br>
-        <table class="tbl-full">
-            <tr>
-                <th>S.N</th>
-                <th>Title</th>
-                <th>Image</th>
-                <th>Featured</th>
-                <th>Active</th>
-                <th>Actions</th>
-            </tr>
 
-            <?php
-                //query to get all category from database
-                $sql = 'SELECT * FROM tbl_category';
-
-                //execute query
-                $res = mysqli_query($conn, $sql);
-
-                //count rows
-                $count = mysqli_num_rows($res);
-
-                //create serial number variable and assgn value 1
-                $sn = 1;
-                
-                //check whether we have data in database
-                if($count>0)
-                {
-                  //we have data in database 
-                  // get the data display
-                  while($row=mysqli_fetch_assoc($res))
-                  {
-                    $id = $row['id'];
-                    $title = $row['title'];
-                    $image_name = $row['image_name'];
-                    $featured = $row['featured'];
-                    $active = $row['active'];
-                    ?>
-            <tr>
-                <td><?php echo $sn++;?></td>
-                <td><?php echo $title;?></td>
-
-                <td>
-                    <?php 
-                    // check image name is available or not
-                    if($image_name!="")
-                    {
-                      //display image
-                    ?>
-
-                    <img src="<?php echo SITEURL;?>images/category/<?php echo $image_name;?>" width='60px'>
-
-                    <?php
-                    }
-                    else
-                    {
-                      echo "<div class ='error'>Image not added.</div>";
-
-                    }
-                    ?>
-                </td>
-
-                <td><?php echo $featured;?></td>
-                <td><?php echo $active;?></td>
-                <td>
-                    <a href="<?php echo SITEURL; ?>admin/update-category.php?id=<?php echo $id; ?>"
-                        class="btn-secondary"> Update Category</a>
-                    <a href="<?php echo SITEURL; ?>admin/delete-category.php?id=<?php echo $id; ?>&image_name=<?php echo $image_name; ?>"
-                        class="btn-danger">Delete Category</a>
-
-                </td>
-            </tr><?php
+        <div class="table-container">
+            <table class="tbl-full">
+                <thead>
+                    <tr>
+                        <th width="5%">S.N</th>
+                        <th width="25%">Title</th>
+                        <th width="20%">Image</th>
+                        <th width="10%">Featured</th>
+                        <th width="10%">Active</th>
+                        <th width="30%">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <?php
+                    $sql = 'SELECT * FROM tbl_category';
+                    $res = mysqli_query($conn, $sql);
+                    $count = mysqli_num_rows($res);
+                    $sn = 1;
                     
-                  }
-                }
-                else
-                {
-                  // we donot have data 
-                  // we will write message in table
-                  ?>
-            <tr>
-                <td colspan="6">
-                    <div class="error">No Category Added</div>
-                </td>
-            </tr>
-
-            <?php
-
-                }
-            ?>
-
-
-        </table>
+                    if($count>0) {
+                      while($row=mysqli_fetch_assoc($res)) {
+                        $id = $row['id'];
+                        $title = $row['title'];
+                        $image_name = $row['image_name'];
+                        $featured = $row['featured'];
+                        $active = $row['active'];
+                        ?>
+                        <tr>
+                            <td><?php echo $sn++;?></td>
+                            <td style="font-weight: 500;"><?php echo $title;?></td>
+                            <td>
+                                <?php 
+                                if($image_name!="") {
+                                ?>
+                                <img src="<?php echo SITEURL;?>images/category/<?php echo $image_name;?>" width="50" style="border-radius:6px; border:1px solid #eee;">
+                                <?php
+                                } else {
+                                  echo "<span style='color:#999; font-size:13px;'>No Image</span>";
+                                }
+                                ?>
+                            </td>
+                            <td>
+                                <?php if($featured == 'Yes') echo "<span style='background:#e0f2fe; color:#0284c7; padding:2px 8px; border-radius:12px; font-size:12px; font-weight:500;'>Yes</span>"; else echo "No"; ?>
+                            </td>
+                            <td>
+                                <?php if($active == 'Yes') echo "<span style='background:#ecfdf5; color:#059669; padding:2px 8px; border-radius:12px; font-size:12px; font-weight:500;'>Yes</span>"; else echo "<span style='background:#fef2f2; color:#dc2626; padding:2px 8px; border-radius:12px; font-size:12px; font-weight:500;'>No</span>"; ?>
+                            </td>
+                            <td>
+                                <a href="<?php echo SITEURL; ?>admin/update-category.php?id=<?php echo $id; ?>" class="btn-secondary"><i class='bx bx-edit'></i> Update</a>
+                                <a href="<?php echo SITEURL; ?>admin/delete-category.php?id=<?php echo $id; ?>&image_name=<?php echo $image_name; ?>" class="btn-danger"><i class='bx bx-trash'></i> Delete</a>
+                            </td>
+                        </tr>
+                        <?php
+                      }
+                    } else {
+                        echo "<tr><td colspan='6' style='text-align:center; padding:30px; color:#666;'>No categories found.</td></tr>";
+                    }
+                ?>
+                </tbody>
+            </table>
+        </div>
     </div>
-</div>
 <?php include('partials/footer.php') ?>
