@@ -3,8 +3,10 @@
 <?php
 // Check if customer is logged in
 if (!isset($_SESSION['customer_id'])) {
-    $_SESSION['customer-login-msg'] = "<div class='auth-message error'>Please login to proceed with checkout.</div>";
-    header('location:' . SITEURL . 'customer/login.php');
+    $_SESSION['customer-login-msg'] = "Please login to proceed with checkout.";
+    // If it's a cart checkout, just redirect back to order.php?cart=1. Otherwise back to the product.
+    $redirect_url = isset($_GET['cart']) ? 'order.php?cart=1' : (isset($_GET['product_id']) ? 'order.php?product_id=' . (int)$_GET['product_id'] : 'cart.php');
+    header('location:' . SITEURL . 'customer/login.php?redirect=' . urlencode($redirect_url));
     exit();
 }
 
@@ -65,10 +67,15 @@ if (isset($_GET['product_id'])) {
 // Ensure total_amount is an integer for Stripe (in cents)
 $total_amount_cents = round($total_amount * 100);
 ?>
+<link rel="stylesheet" href="<?php echo SITEURL; ?>css/checkout.css">
 
-<section class="checkout-section" style="padding: 40px 20px; background: #f9f9f9; min-height: 70vh;">
-    <div class="container" style="max-width: 1000px; margin: 0 auto;">
-        <h2 style="color: #155e58; border-bottom: 2px solid #15c293; padding-bottom: 10px; margin-bottom: 30px;">Checkout</h2>
+<section class="checkout-section" style="padding: 50px 20px; min-height: 70vh;">
+    <div class="container" style="max-width: 1050px; margin: 0 auto;">
+        
+        <div style="display: flex; align-items: center; margin-bottom: 40px;">
+            <i class='bx bx-check-shield' style="font-size: 32px; color: #155e58; margin-right: 15px;"></i>
+            <h2 style="color: #155e58; margin: 0; font-size: 32px; font-weight: 700;">Secure Checkout</h2>
+        </div>
 
         <?php
         if (isset($_SESSION['order-error'])) {
@@ -77,108 +84,115 @@ $total_amount_cents = round($total_amount * 100);
         }
         ?>
 
-        <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 30px;">
+        <div style="display: grid; grid-template-columns: 1.6fr 1fr; gap: 40px;">
             
             <!-- Left Column: Delivery Details -->
-            <div style="background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
-                <h3 style="color: #333; margin-bottom: 20px;">Delivery Information</h3>
+            <div style="background: #fff; padding: 40px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.04);">
+                <h3 style="color: #222; margin-bottom: 25px; font-size: 22px; font-weight: 700; border-bottom: 2px solid #f0f0f0; padding-bottom: 15px;">Delivery Details</h3>
                 
                 <form action="process-order.php" method="POST" enctype="multipart/form-data" id="checkout-form">
                     
-                    <div style="margin-bottom: 15px;">
-                        <label style="display: block; font-weight: 600; margin-bottom: 5px;">Full Name</label>
-                        <input type="text" name="customer_name" value="<?php echo htmlspecialchars($customer['full_name']); ?>" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+                    <div class="form-group">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" name="customer_name" class="form-control" value="<?php echo htmlspecialchars($customer['full_name']); ?>" required placeholder="John Doe">
                     </div>
 
-                    <div style="margin-bottom: 15px;">
-                        <label style="display: block; font-weight: 600; margin-bottom: 5px;">Phone Number</label>
-                        <input type="tel" name="customer_contact" value="<?php echo htmlspecialchars($customer['phone']); ?>" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div class="form-group">
+                            <label class="form-label">Phone Number</label>
+                            <input type="tel" name="customer_contact" class="form-control" value="<?php echo htmlspecialchars($customer['phone']); ?>" required placeholder="+880 1XXXXXXXXX">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Email Address</label>
+                            <input type="email" name="customer_email" class="form-control" value="<?php echo htmlspecialchars($customer['email']); ?>" required placeholder="john@example.com">
+                        </div>
                     </div>
 
-                    <div style="margin-bottom: 15px;">
-                        <label style="display: block; font-weight: 600; margin-bottom: 5px;">Email Address</label>
-                        <input type="email" name="customer_email" value="<?php echo htmlspecialchars($customer['email']); ?>" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
-                    </div>
-
-                    <div style="margin-bottom: 15px;">
-                        <label style="display: block; font-weight: 600; margin-bottom: 5px;">Delivery Address</label>
-                        <textarea name="customer_address" required rows="3" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;"><?php echo htmlspecialchars($customer['address']); ?></textarea>
+                    <div class="form-group" style="margin-bottom: 30px;">
+                        <label class="form-label">Complete Address</label>
+                        <textarea name="customer_address" class="form-control" required rows="3" placeholder="House/Flat No, Street, Area, City"><?php echo htmlspecialchars($customer['address']); ?></textarea>
                     </div>
 
                     <?php if ($requires_prescription): ?>
-                    <div style="margin-bottom: 25px; padding: 15px; background: #ffebee; border-left: 4px solid #f44336; border-radius: 4px;">
-                        <h4 style="color: #c62828; margin-top: 0;">Prescription Required</h4>
-                        <p style="font-size: 14px; color: #555; margin-bottom: 10px;">One or more items in your order require a doctor's prescription. Please upload an image of your prescription below.</p>
-                        <input type="file" name="prescription" accept="image/*" required style="width: 100%; padding: 10px; background: #fff; border: 1px solid #ddd; border-radius: 6px;">
+                    <div class="prescription-box">
+                        <h4 style="color: #c62828; margin-top: 0; display: flex; align-items: center; gap: 8px;">
+                            <i class='bx bx-error-circle'></i> Prescription Required
+                        </h4>
+                        <p style="font-size: 14px; color: #555; line-height: 1.6; margin-bottom: 15px;">You have items in your cart that require a valid doctor's prescription. Please upload a clear image of it.</p>
+                        <input type="file" name="prescription" accept="image/*" required style="width: 100%; padding: 12px; background: #fff; border: 1px dashed #d32f2f; border-radius: 8px; cursor: pointer;">
                     </div>
                     <?php endif; ?>
 
-                    <h3 style="color: #333; margin-top: 30px; margin-bottom: 20px;">Payment Method</h3>
+                    <h3 style="color: #222; margin-top: 40px; margin-bottom: 25px; font-size: 22px; font-weight: 700; border-bottom: 2px solid #f0f0f0; padding-bottom: 15px;">Payment Method</h3>
                     
-                    <div style="margin-bottom: 15px;">
-                        <label style="display: flex; align-items: center; padding: 15px; border: 1px solid #ddd; border-radius: 6px; cursor: pointer; background: #fdfdfd;">
-                            <input type="radio" name="payment_method" value="Cash on Delivery" checked style="margin-right: 10px; width: 18px; height: 18px;">
-                            <span style="font-weight: 600;">Cash on Delivery (COD)</span>
-                        </label>
-                    </div>
+                    <label class="payment-option">
+                        <input type="radio" name="payment_method" value="Cash on Delivery" checked>
+                        <span class="payment-text">Cash on Delivery (COD)</span>
+                        <i class='bx bx-money'></i>
+                    </label>
                     
-                    <div style="margin-bottom: 25px;">
-                        <label style="display: flex; align-items: center; padding: 15px; border: 1px solid #ddd; border-radius: 6px; cursor: pointer; background: #fdfdfd;">
-                            <input type="radio" name="payment_method" value="Stripe" style="margin-right: 10px; width: 18px; height: 18px;">
-                            <span style="font-weight: 600;">Pay Online with Card (Stripe)</span>
-                        </label>
-                    </div>
+                    <label class="payment-option" style="margin-bottom: 35px;">
+                        <input type="radio" name="payment_method" value="Stripe">
+                        <span class="payment-text">Pay Online with Card (Stripe)</span>
+                        <i class='bx bxl-stripe' style="color: #6772e5;"></i>
+                    </label>
 
-                    <!-- Hidden fields to pass data to process-order.php -->
+                    <!-- Hidden fields -->
                     <input type="hidden" name="is_cart" value="<?php echo $is_cart ? '1' : '0'; ?>">
                     <?php if (!$is_cart): ?>
                         <input type="hidden" name="product_id" value="<?php echo $items[0]['id']; ?>">
                     <?php endif; ?>
 
-                    <input type="submit" name="submit" value="Confirm Order" style="width: 100%; padding: 15px; background: linear-gradient(135deg, #155e58, #15c293); color: white; border: none; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 10px rgba(21,194,147,0.3);">
+                    <button type="submit" name="submit" class="btn-confirm">
+                        Place Order <i class='bx bx-right-arrow-alt' style="vertical-align: middle; margin-left: 5px;"></i>
+                    </button>
                 </form>
             </div>
 
             <!-- Right Column: Order Summary -->
             <div>
-                <div style="background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); position: sticky; top: 20px;">
-                    <h3 style="color: #333; margin-bottom: 20px;">Order Summary</h3>
+                <div style="background: #fff; padding: 35px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.04); position: sticky; top: 30px;">
+                    <h3 style="color: #222; margin-bottom: 25px; font-size: 20px; font-weight: 700;">Order Summary</h3>
                     
-                    <div style="max-height: 300px; overflow-y: auto; padding-right: 10px; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px;">
+                    <div style="max-height: 350px; overflow-y: auto; padding-right: 15px; margin-bottom: 25px;">
                         <?php foreach ($items as $item): ?>
-                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px;">
-                            <div style="display: flex; align-items: center; gap: 10px;">
+                        <div class="summary-item">
+                            <div style="display: flex; align-items: center; gap: 15px;">
                                 <?php if ($item['image_name']): ?>
-                                    <img src="<?php echo SITEURL; ?>images/product/<?php echo $item['image_name']; ?>" style="width: 50px; border-radius: 4px;">
+                                    <img src="<?php echo SITEURL; ?>images/product/<?php echo $item['image_name']; ?>" style="width: 55px; height: 55px; object-fit: cover; border-radius: 8px; border: 1px solid #eee;">
                                 <?php else: ?>
-                                    <div style="width: 50px; height: 50px; background: #eee; border-radius: 4px;"></div>
+                                    <div style="width: 55px; height: 55px; background: #f0f0f0; border-radius: 8px; display: flex; align-items: center; justify-content: center;"><i class='bx bx-image' style="color: #ccc; font-size: 24px;"></i></div>
                                 <?php endif; ?>
                                 <div>
-                                    <p style="margin: 0; font-weight: 600; font-size: 14px;"><?php echo htmlspecialchars($item['title']); ?></p>
-                                    <p style="margin: 0; color: #888; font-size: 13px;">Qty: <?php echo $item['qty']; ?></p>
+                                    <p style="margin: 0 0 4px 0; font-weight: 600; font-size: 15px; color: #333; line-height: 1.3;"><?php echo htmlspecialchars($item['title']); ?></p>
+                                    <p style="margin: 0; color: #777; font-size: 13px; background: #f5f5f5; display: inline-block; padding: 2px 8px; border-radius: 12px;">Qty: <?php echo $item['qty']; ?></p>
                                 </div>
                             </div>
-                            <div style="font-weight: bold; color: #155e58;">
-                                ৳<?php echo ($item['price'] * $item['qty']); ?>
+                            <div style="font-weight: 700; color: #155e58; font-size: 15px;">
+                                ৳<?php echo number_format($item['price'] * $item['qty'], 2); ?>
                             </div>
                         </div>
                         <?php endforeach; ?>
                     </div>
                     
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                        <span style="color: #666;">Subtotal</span>
-                        <span style="font-weight: 600;">৳<?php echo $total_amount; ?></span>
+                    <div style="background: #fdfdfd; padding: 20px; border-radius: 12px; border: 1px dashed #dce1e6;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+                            <span style="color: #666; font-size: 15px;">Subtotal</span>
+                            <span style="font-weight: 600; color: #333;">৳<?php echo number_format($total_amount, 2); ?></span>
+                        </div>
+                        
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #eaeaea;">
+                            <span style="color: #666; font-size: 15px;">Shipping</span>
+                            <span style="font-weight: 600; color: #2e7d32; background: #e8f5e9; padding: 2px 8px; border-radius: 4px; font-size: 14px;">Free</span>
+                        </div>
+                        
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span style="font-weight: 700; font-size: 18px; color: #222;">Total Amount</span>
+                            <span style="font-weight: 800; font-size: 28px; color: #e65100;">৳<?php echo number_format($total_amount, 2); ?></span>
+                        </div>
                     </div>
                     
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #eee;">
-                        <span style="color: #666;">Shipping</span>
-                        <span style="font-weight: 600; color: #2e7d32;">Free</span>
-                    </div>
-                    
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <span style="font-weight: bold; font-size: 18px; color: #333;">Total</span>
-                        <span style="font-weight: bold; font-size: 24px; color: #e65100;">৳<?php echo $total_amount; ?></span>
-                    </div>
                 </div>
             </div>
 

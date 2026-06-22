@@ -15,14 +15,15 @@ if (isset($_POST['submit'])) {
     $payment_method = mysqli_real_escape_string($conn, $_POST['payment_method']);
     
     $is_cart = (int)$_POST['is_cart'];
-    $order_date = date("Y-m-d h:i:sa");
+    $order_date = date("Y-m-d H:i:s");
     $status = "Ordered";
     $payment_status = "Pending";
     
     // Handle prescription upload
     $prescription_name = "";
     if (isset($_FILES['prescription']['name']) && $_FILES['prescription']['name'] != "") {
-        $ext = end(explode('.', $_FILES['prescription']['name']));
+        $name_parts = explode('.', $_FILES['prescription']['name']);
+        $ext = end($name_parts);
         $prescription_name = "Prescription_" . rand(0000, 9999) . "." . $ext;
         $src = $_FILES['prescription']['tmp_name'];
         $dst = "images/prescription/" . $prescription_name;
@@ -66,16 +67,18 @@ if (isset($_POST['submit'])) {
         exit();
     }
 
-    // Insert orders (one per product to match existing structure, though usually orders have line items)
+    // Insert orders
     $order_ids = [];
     foreach ($items as $item) {
         $product = mysqli_real_escape_string($conn, $item['title']);
+        $product_id = (int)$item['product_id'];
         $price = $item['price'];
         $qty = $item['qty'];
         $total = $price * $qty;
         
         $insert_sql = "INSERT INTO tbl_order SET
             customer_id=$customer_id,
+            product_id=$product_id,
             product='$product',
             price=$price,
             qty=$qty,
@@ -93,6 +96,8 @@ if (isset($_POST['submit'])) {
         
         if (mysqli_query($conn, $insert_sql)) {
             $order_ids[] = mysqli_insert_id($conn);
+        } else {
+            error_log("Order Insert Failed: " . mysqli_error($conn));
         }
     }
 
@@ -119,7 +124,7 @@ if (isset($_POST['submit'])) {
         include('send_order_email.php');
         sendOrderConfirmationEmail($customer_email, $customer_name, $order_ids);
 
-        $_SESSION['order-success'] = "<div class='success text-center'><h3>Order Placed Successfully!</h3><p>Your order will be delivered soon.</p></div>";
+        $_SESSION['success'] = "Order Placed Successfully! Your order will be delivered soon.";
         header('location:' . SITEURL . 'customer/my-orders.php');
         exit();
     }

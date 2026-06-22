@@ -1,125 +1,80 @@
 <?php include('partials-front/menu.php'); ?>
 
-<!-- product sEARCH Section Starts Here -->
-<section class="product-search text-center">
+<!-- Hero / Search Section -->
+<section class="hero-section" style="padding: 4% 0;">
     <div class="container">
-
-        <form action="<?php echo SITEURL;?>product-search.php" method="POST">
-            <input type="search" name="search" placeholder="Search for product.." required>
-            <input type="submit" name="submit" value="Search" class="btn btn-primary">
+        <form action="<?php echo SITEURL;?>product-search.php" method="POST" class="search-box">
+            <input type="search" name="search" placeholder="Search for products, brands, or categories..." required>
+            <button type="submit" name="submit" class="btn-search"><i class='bx bx-search'></i> Search</button>
         </form>
-
     </div>
 </section>
-<!-- product sEARCH Section Ends Here -->
 
-
-
-<!-- product MEnu Section Starts Here -->
+<!-- Product Menu Section -->
 <section class="product-menu">
     <div class="container">
-        <h2 class="text-center">Product Menu</h2>
-
-
-        <?php
-             //Display product that are Active
-             $sql="SELECT * FROM tbl_product WHERE active='Yes'  ";
-
-
-             //Execute the query
+        <h2 class="text-center">All Products</h2>
+        
+        <div class="product-grid">
+            <?php 
+            $sql="SELECT * FROM tbl_product WHERE active='Yes'";
             $res=mysqli_query($conn, $sql);
-
-            //count rows 
-             $count=mysqli_num_rows($res);
-             if($count>0)
-             {
-              //product Available
-                 while($row=mysqli_fetch_assoc($res))
-                 {
-                     //get all the values
-
-                   $id=$row['id'];
-                   $title=$row['title']; 
-                   $price=$row['price'];
-                   $description=$row['description'];
-                   $image_name=$row['image_name'];  
-                   ?>
-        <div class="product-menu-box">
-            <div class="product-menu-img">
-                <?php 
-                     //check whether image is available or not
-                     if($image_name=="")
-                     {
-                         //Image Not Available
-                         echo "<div class='error'>Image Not Available.</div>";
-                     }
-                     else
-                     {
-                          //image Available
-                        ?>
-                <img src="<?php echo SITEURL;?>images/product/<?php echo $image_name;?>" alt="  medicine "
-                    class="img-responsive img-curve">
-                <?php
-                      }
-
-                     
-                  ?>
-            </div>
-
-            <div class="product-menu-desc">
-                <a href="<?php echo SITEURL; ?>product-detail.php?id=<?php echo $id; ?>" style="text-decoration:none;">
-                    <h4 style="color:#155e58;"><?php echo $title;?></h4>
-                </a>
-                
-                <?php
-                    // Get average rating
-                    $rate_sql = "SELECT AVG(rating) as avg_rate FROM tbl_review WHERE product_id=$id";
-                    $rate_res = mysqli_query($conn, $rate_sql);
-                    $rate_row = mysqli_fetch_assoc($rate_res);
-                    $avg_rate = $rate_row['avg_rate'] ? round($rate_row['avg_rate'], 1) : 0;
-                ?>
-                <div style="color: #ffb300; font-size: 14px; margin-bottom: 5px;">
-                    <?php 
-                        for($i=1; $i<=5; $i++) {
-                            if ($i <= round($avg_rate)) echo "★";
-                            else echo "☆";
-                        }
+            if(mysqli_num_rows($res) > 0) {
+                while($row=mysqli_fetch_assoc($res)) {
+                    $id=$row['id'];
+                    $title=$row['title'];
+                    $price=$row['price'];
+                    $description=$row['description'];
+                    $image_name=$row['image_name'];
                     ?>
-                    <span style="color:#888; font-size:12px;">(<?php echo $avg_rate; ?>)</span>
-                </div>
+                    <div class="product-card">
+                        <div class="product-img">
+                            <?php if($image_name == ""): ?>
+                                <div style="background: #eee; height: 100%; display:flex; align-items:center; justify-content:center;"><i class='bx bx-image text-muted' style="font-size:30px;"></i></div>
+                            <?php else: ?>
+                                <img src="<?php echo SITEURL;?>images/product/<?php echo $image_name;?>" alt="<?php echo $title; ?>">
+                            <?php endif; ?>
+                        </div>
 
-                <p class="product-price">৳ <?php echo $price;?></p>
-                <p class="product-detail">
-                    <?php echo $description;?>
-                </p>
-                <br>
+                        <div class="product-info">
+                            <a href="<?php echo SITEURL; ?>product-detail.php?id=<?php echo $id; ?>">
+                                <div class="product-title"><?php echo $title; ?></div>
+                            </a>
+                            
+                            <?php
+                                $rate_sql = "SELECT AVG(rating) as avg_rate FROM tbl_review WHERE product_id=$id";
+                                $rate_res = mysqli_query($conn, $rate_sql);
+                                $rate_row = mysqli_fetch_assoc($rate_res);
+                                $avg_rate = $rate_row['avg_rate'] ? round($rate_row['avg_rate'], 1) : 0;
+                            ?>
+                            <div style="color: #ffb300; font-size: 14px; margin-bottom: 8px;">
+                                <?php 
+                                    for($i=1; $i<=5; $i++) {
+                                        if ($i <= round($avg_rate)) echo "★";
+                                        else echo "☆";
+                                    }
+                                ?>
+                                <span style="color: var(--text-muted); font-size: 12px; margin-left: 5px;">(<?php echo $avg_rate; ?>)</span>
+                            </div>
 
-                <a href="<?php echo SITEURL; ?>add-to-cart.php?product_id=<?php echo $id; ?>" class="btn btn-primary" style="background:#155e58; border:none; margin-right:5px;">Add to Cart</a>
-                <a href="<?php echo SITEURL; ?>order.php?product_id=<?php echo $id; ?>" class="btn btn-primary">Buy Now</a>
-            </div>
+                            <div class="product-price">৳<?php echo number_format($price, 2); ?></div>
+                            <div class="product-desc"><?php echo $description; ?></div>
+                            
+                            <div class="product-actions">
+                                <a href="<?php echo SITEURL; ?>add-to-cart.php?product_id=<?php echo $id; ?>" class="btn-icon" title="Add to Cart">
+                                    <i class='bx bx-cart-add' style="font-size: 22px;"></i>
+                                </a>
+                                <a href="<?php echo SITEURL; ?>order.php?product_id=<?php echo $id; ?>" class="btn-buy">Buy Now</a>
+                            </div>
+                        </div>
+                    </div>
+                    <?php
+                }
+            } else {
+                echo "<div class='error text-center'>Products Not Available.</div>";
+            }
+            ?>
         </div>
-
-
-        <?php 
-                 }
-
-              }
-              else
-              {
-                //product Not Available
-                echo "<div class='error'>Product Not Available.</div>";
-              }
-
-         ?>
-
-
-
-        <div class="clearfix"></div>
-
-
-
     </div>
-
 </section>
-<!-- product Menu Section Ends Here -->
 <?php include('partials-front/footer.php'); ?>
