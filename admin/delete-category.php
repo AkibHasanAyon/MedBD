@@ -7,7 +7,7 @@
     {
         //get the value and delete
         // echo 'Get value and delete';
-        $id = $_GET['id'];
+        $id = (int)$_GET['id'];
         $image_name = $_GET['image_name'];
 
         //remove physical image file if available

@@ -73,7 +73,7 @@
              echo "clicked";
 
             // 1. get the value from category form
-             $title = $_POST['title'];
+             $title = mysqli_real_escape_string($conn, $_POST['title']);
 
             // for radio input we need to check button is selected or not 
             if(isset($_POST['featured']))
@@ -143,8 +143,6 @@
                 //don't upload image and set the image name value to blank
                 $image_name = "";
             }
-            //checking quatation and replacing it \'
-            $title = str_replace("'","\'",$title);
             //2. create sql query to insert data in the database
 
             $sql = "INSERT INTO tbl_category SET

@@ -9,7 +9,7 @@
 
         
         //1. get id and image
-        $id = $_GET['id'];
+        $id = (int)$_GET['id'];
         $image_name = $_GET['image_name'];
 
         //2. remove image if available

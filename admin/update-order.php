@@ -1,4 +1,4 @@
-﻿<?php include('partials/menu.php') ?>
+<?php include('partials/menu.php') ?>
 
 <div class="main-content">
     <div class="wrapper">
@@ -10,7 +10,7 @@
            if(isset($_GET['id']))
            {
                //Get the order Details
-               $id=$_GET['id'];
+               $id=(int)$_GET['id'];
                //Get all the id according to id
 
                //Sql Query to gety the order details
@@ -124,19 +124,17 @@
          {
              //echo "Clicked"
              //Get All the Values from form
-               $id=$_POST['id'];
-               $price=$_POST['price'];
-               $qty=$_POST['qty'];
+               $id=(int)$_POST['id'];
+               $price=mysqli_real_escape_string($conn, $_POST['price']);
+               $qty=(int)$_POST['qty'];
                $total=$price*$qty;
-               $status=$_POST['status'];
-               $customer_name=$_POST['customer_name'];
-               $customer_contact=$_POST['customer_contact'];
-               $customer_email=$_POST['customer_email'];
-               $customer_address=$_POST['customer_address'];
+               $status=mysqli_real_escape_string($conn, $_POST['status']);
+               $customer_name=mysqli_real_escape_string($conn, $_POST['customer_name']);
+               $customer_contact=mysqli_real_escape_string($conn, $_POST['customer_contact']);
+               $customer_email=mysqli_real_escape_string($conn, $_POST['customer_email']);
+               $customer_address=mysqli_real_escape_string($conn, $_POST['customer_address']);
 
              //update the values
-             
-             $customer_address = str_replace("'","\'",$customer_address);
              $sql2="UPDATE tbl_order SET 
                    qty=$qty,
                    total=$total,

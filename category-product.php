@@ -5,7 +5,7 @@
        if(isset($_GET['category_id']))
        {
            //category id set and get the id
-           $category_id=$_GET['category_id'];
+           $category_id=(int)$_GET['category_id'];
            //Get the category title based on category id
 
            $sql="SELECT title FROM tbl_category WHERE id=$category_id";

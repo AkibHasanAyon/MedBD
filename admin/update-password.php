@@ -8,7 +8,7 @@
         <?php
         
         if(isset($_GET['id'])){
-            $id=$_GET['id'];
+            $id=(int)$_GET['id'];
         }
         
         
@@ -55,10 +55,10 @@ if(isset($_POST['submit']))
 {
    // echo "button Clicked";
    //1,Get All the values from form 
-   $id =$_POST['id'];
-   $current_password =md5($_POST['current_password']) ;
-   $new_password =md5($_POST['new_password']);
-   $confirm_password =md5($_POST['confirm_password']);
+   $id =(int)$_POST['id'];
+   $current_password =md5(mysqli_real_escape_string($conn, $_POST['current_password']));
+   $new_password =md5(mysqli_real_escape_string($conn, $_POST['new_password']));
+   $confirm_password =md5(mysqli_real_escape_string($conn, $_POST['confirm_password']));
     
    //Check whethaer the user with current Id And Password Exists or not
 

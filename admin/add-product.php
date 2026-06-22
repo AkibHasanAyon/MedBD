@@ -127,10 +127,10 @@
             // echo "clicked"; 
 
             // 1.get data from form
-            $title = $_POST['title'];
-            $description = $_POST['description'];
-            $price = $_POST['price'];
-            $category = $_POST['category'];
+            $title = mysqli_real_escape_string($conn, $_POST['title']);
+            $description = mysqli_real_escape_string($conn, $_POST['description']);
+            $price = mysqli_real_escape_string($conn, $_POST['price']);
+            $category = (int)$_POST['category'];
 
             //check wheter the radio button for featured and active are checked or not
             if(isset($_POST['featured']))
@@ -202,8 +202,6 @@
 
             // Create sql query to save or add data to database
             // for numerical value we don't need pass value inside "" but for string value it is compulsory
-            $title = str_replace("'","\'",$title);
-            $description = str_replace("'","\'",$description);
             $sql2 = "INSERT INTO tbl_product  SET
                 title = '$title',
                 description = '$description',

@@ -64,9 +64,9 @@
 
    //1.Get the data from form
 
-     $full_name=$_POST['full_name'];
-     $username=$_POST['username'];
-     $password=md5($_POST['password']);//password encryption with MD5
+     $full_name=mysqli_real_escape_string($conn, $_POST['full_name']);
+     $username=mysqli_real_escape_string($conn, $_POST['username']);
+     $password=md5(mysqli_real_escape_string($conn, $_POST['password']));//password encryption with MD5
 
    //2.Sql Query to save the data into database
    $sql="INSERT INTO tbl_admin SET
@@ -82,7 +82,7 @@
 //    $db_select=mysqli_select_db($conn,'product-order') or die(mysqli_error());//delecting database
 
 
-   $res=mysqli_query($conn,$sql) or die(mysqli_error());
+   $res=mysqli_query($conn,$sql) or die(mysqli_error($conn));
 
    //4.Check whether the (query is cexecuted) data is inserted or not and display appropriate message
    if($res==TRUE)

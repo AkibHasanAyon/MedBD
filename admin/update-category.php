@@ -14,7 +14,7 @@
             {
                 // get the id and all the details
                 // echo "getting the data";
-                $id = $_GET['id'];
+                $id = (int)$_GET['id'];
                 //create sql query to get all other details
                 $sql = "SELECT * FROM tbl_category WHERE id=$id";
 
@@ -118,9 +118,9 @@
                 // echo "clicked";
                 // 1.get all the values from the form
 
-                $id = $_POST['id'];
-                $title = $_POST['title'];
-                $current_image = $_POST['current_image'];
+                $id = (int)$_POST['id'];
+                $title = mysqli_real_escape_string($conn, $_POST['title']);
+                $current_image = mysqli_real_escape_string($conn, $_POST['current_image']);
                 $featured = $_POST['featured'];
                 $active = $_POST['active'];
 

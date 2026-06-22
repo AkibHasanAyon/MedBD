@@ -8,7 +8,7 @@
         <?php 
         
           //1.Get the ID of Selected Admin
-          $id=$_GET['id'];
+          $id=(int)$_GET['id'];
 
           //2.Create SQL Query to Get The details
           $sql="SELECT * FROM tbl_admin WHERE id=$id";
@@ -83,9 +83,9 @@ if(isset($_POST['submit']))
 {
    // echo "button Clicked";
    //Get All the values from form to update
-   $id =$_POST['id'];
-   $full_name = $_POST['full_name'];
-   $username = $_POST['username'];
+   $id =(int)$_POST['id'];
+   $full_name = mysqli_real_escape_string($conn, $_POST['full_name']);
+   $username = mysqli_real_escape_string($conn, $_POST['username']);
     
    //Create  a Sql Query to update Admin
    $sql="UPDATE tbl_admin SET

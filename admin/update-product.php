@@ -7,7 +7,7 @@ ob_start();
             if(isset($_GET['id']))
             {
                 // get the id and all the details
-                $id = $_GET['id'];
+                $id = (int)$_GET['id'];
                 
                 //create sql query to get all other details
                 $sql2 = "SELECT * FROM tbl_product WHERE id=$id";
@@ -170,12 +170,12 @@ ob_start();
                 // echo "clicked";
                 // 1.get all the details from the form
 
-                $id = $_POST['id'];
-                $title = $_POST['title'];
-                $description = $_POST['description'];
-                $price = $_POST['price'];
-                $current_image = $_POST['current_image'];
-                $category = $_POST['category'];
+                $id = (int)$_POST['id'];
+                $title = mysqli_real_escape_string($conn, $_POST['title']);
+                $description = mysqli_real_escape_string($conn, $_POST['description']);
+                $price = mysqli_real_escape_string($conn, $_POST['price']);
+                $current_image = mysqli_real_escape_string($conn, $_POST['current_image']);
+                $category = (int)$_POST['category'];
             
                 $featured = $_POST['featured'];
                 $active = $_POST['active'];
@@ -248,9 +248,6 @@ ob_start();
                 }
 
                 // 4.update the data in the database
-
-                $title = str_replace("'","\'",$title);
-                $description = str_replace("'","\'",$description);
 
                 $sql3 = "UPDATE tbl_product SET 
                 title = '$title',

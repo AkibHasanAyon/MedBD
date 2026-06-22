@@ -1,10 +1,10 @@
-﻿<?php include 'partials-front/menu.php';?>
+<?php include 'partials-front/menu.php';?>
 <?php
 
 //check whether product is  set or not
 if (isset($_GET['product_id'])) {
     //Get the product id and details of the selected
-    $product_id = $_GET['product_id'];
+    $product_id = (int)$_GET['product_id'];
 
     //Get the details of the selected product
     $sql = "SELECT * FROM tbl_product WHERE id=$product_id";
@@ -103,23 +103,21 @@ if ($image_name == "") {
 if (isset($_POST['submit'])) {
     //Get all the details from the form
 
-    $product_id = $_GET['product_id'];
-    $product = $_POST['product'];
+    $product_id = (int)$_GET['product_id'];
+    $product = mysqli_real_escape_string($conn, $_POST['product']);
     $price = $_POST['price'];
     $qty = $_POST['qty'];
     $total = $price * $qty; //total=price*qty
     // $order_date=date();
     $order_date = date("Y-m-d h:i:sa"); //order date
     $status = "Ordered"; //ordered ,on delivery ,Delivered,Cancelation
-    $customer_name = $_POST['full-name'];
-    $customer_contact = $_POST['contact'];
-    $customer_email = $_POST['email'];
-    $customer_address = $_POST['address'];
+    $customer_name = mysqli_real_escape_string($conn, $_POST['full-name']);
+    $customer_contact = mysqli_real_escape_string($conn, $_POST['contact']);
+    $customer_email = mysqli_real_escape_string($conn, $_POST['email']);
+    $customer_address = mysqli_real_escape_string($conn, $_POST['address']);
 
     //Save the order in datbase
     //Create SQL to save the data
-    $product = str_replace("'","\'",$product);
-    $customer_address = str_replace("'","\'",$customer_address);
 
     $sql2 = "INSERT INTO tbl_order SET
                   product_id = $product_id,
