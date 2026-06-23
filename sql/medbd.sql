@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jun 22, 2026 at 08:37 AM
+-- Generation Time: Jun 23, 2026 at 07:19 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -98,15 +98,18 @@ CREATE TABLE `tbl_customer` (
   `phone` varchar(20) NOT NULL,
   `password` varchar(255) NOT NULL,
   `address` varchar(255) DEFAULT '',
-  `created_at` datetime DEFAULT current_timestamp()
+  `created_at` datetime DEFAULT current_timestamp(),
+  `is_verified` tinyint(1) NOT NULL DEFAULT 0,
+  `otp_code` varchar(10) DEFAULT NULL,
+  `otp_expires_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `tbl_customer`
 --
 
-INSERT INTO `tbl_customer` (`id`, `full_name`, `email`, `phone`, `password`, `address`, `created_at`) VALUES
-(1, 'Akib Hasan', 'ayon.isc@gmail.com', '01746585025', '$2y$10$i9yvlygh52B/i8UF3JX/FO5ZWNDw4.Dz/mFVfMe1d/FNbd5gqT.FG', '287/A, Shantibag', '2026-06-22 11:04:51');
+INSERT INTO `tbl_customer` (`id`, `full_name`, `email`, `phone`, `password`, `address`, `created_at`, `is_verified`, `otp_code`, `otp_expires_at`) VALUES
+(1, 'Akib Hasan', 'ayon.isc@gmail.com', '01746585025', '$2y$10$i9yvlygh52B/i8UF3JX/FO5ZWNDw4.Dz/mFVfMe1d/FNbd5gqT.FG', '287/A, Shantibag', '2026-06-22 11:04:51', 1, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -163,75 +166,76 @@ CREATE TABLE `tbl_product` (
   `category_id` int(10) UNSIGNED NOT NULL,
   `featured` varchar(10) NOT NULL,
   `active` varchar(10) NOT NULL,
-  `requires_prescription` varchar(10) DEFAULT 'No'
+  `requires_prescription` varchar(10) DEFAULT 'No',
+  `stock_qty` int(11) NOT NULL DEFAULT 50
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `tbl_product`
 --
 
-INSERT INTO `tbl_product` (`id`, `title`, `description`, `price`, `image_name`, `category_id`, `featured`, `active`, `requires_prescription`) VALUES
-(21, 'Jhonson\'s Baby Shampoo', 'Jhonson\'s Baby Shampoo 200ml\r\nWash baby\'s hair with Johnson\'s® hypoallergenic and tear-free baby shampoo to gently cleanse and leave baby\'s hair fresh and shiny.', 299.00, 'Product-Name_73904.jpg', 25, 'No', 'Yes', 'No'),
-(22, 'Huggies Wonder Pants Diaper', 'Diaper pants with 3-D Bubble-Bed provides ultimate cottony softness to your baby’s skin.', 1000.00, 'Product-Name_84631.webp', 25, 'No', 'Yes', 'No'),
-(23, 'Kids Brush', 'Kids U-Shape Silicon Brush', 350.00, 'Product-Name_83418.jpg', 25, 'Yes', 'Yes', 'No'),
-(24, 'Flashlight Earpick', 'LED Light Ear Cleaner Flashlight Earpick', 250.00, 'Product-Name_11140.jpg', 25, 'No', 'Yes', 'No'),
-(25, 'Nestlé Cerelac', 'Nestlé Cerelac 3 Wheat _ Three Fruits Baby Food BIB ', 350.00, 'Product-Name_3966.jpg', 25, 'No', 'No', 'No'),
-(26, 'Nestlé Lactogen', 'Nestlé Lactogen 1 Infant Formula TIN', 650.00, 'Product-Name_32473.jpg', 25, 'No', 'Yes', 'No'),
-(27, 'Nestlé Milk Powder', 'Nestlé Nido 1+ Milk Powder (1-3 years)350gm', 375.00, 'Product-Name_80671.jpg', 25, 'No', 'Yes', 'No'),
-(28, 'Pampers', 'Pampers All Round Protection Pants-L', 1599.00, 'Product-Name_48851.jpg', 25, 'Yes', 'Yes', 'No'),
-(29, 'Pozzy Wet Wipes', 'Pozzy Comfort Cotton Wet Wipes', 235.00, 'Product-Name_5713.webp', 25, 'No', 'Yes', 'No'),
-(30, 'Baby Spoon', 'Silicone Feeding Spoon For Baby', 180.00, 'Product-Name_20514.jpg', 25, 'No', 'Yes', 'No'),
-(32, 'Blood Glucometer', 'Accu Chek Active Blood Glucometer', 2300.00, 'Product-Name_77314.jpg', 26, 'Yes', 'Yes', 'No'),
-(33, 'Blood Lancet Needles', 'Blood Lancet Needles For Diabetes(30g)', 115.00, 'Product-Name_35022.jpg', 26, 'Yes', 'Yes', 'No'),
-(34, 'Hot Water Bag', 'Hot Water Bag (Medium Size)With Cover ', 250.00, 'Product-Name_63938.jpg', 26, 'No', 'Yes', 'No'),
-(35, 'Reusable Insulin Pen', 'Novopen 4 Silver Reusable Insulin Pen', 590.00, 'Product-Name_28613.webp', 26, 'Yes', 'Yes', 'No'),
-(36, 'Thermometer Digital LCD', 'Thermometer Digital LCD', 120.00, 'Product-Name_1319.jpg', 26, 'Yes', 'Yes', 'No'),
-(37, 'Uptech Go', 'Uptech Go(AERO SPACER)Adult', 369.00, 'Product-Name_32636.jpg', 26, 'Yes', 'Yes', 'No'),
-(38, ' SANITARY NAPKIN', 'WHISPER MAXI FIT SANITARY NAPKIN (15 PADS)', 250.00, 'Product-Name_93820.webp', 30, 'No', 'Yes', 'No'),
-(39, 'Femicon', 'Femicon', 32.00, 'Product-Name_67038.png', 30, 'No', 'No', 'No'),
-(40, 'Sanitary Napkin ', 'Freedom Savlon Sanitary Napkin (Heavy Flow Wings)', 200.00, 'Product-Name_95902.jpg', 30, 'No', 'No', 'No'),
-(41, 'Himalaya Shatavari ', 'Himalaya Shatavari Women_s Wellness', 650.00, 'Product-Name_24801.webp', 30, 'Yes', 'No', 'No'),
-(42, 'Menstrual Cup', 'Menstrual Cup for Women Hygiene During Period Icare Cup', 1150.00, 'Product-Name_82195.webp', 30, 'No', 'Yes', 'No'),
-(43, 'Minicon', 'Minicon', 36.00, 'Product-Name_3327.png', 30, 'No', 'No', 'No'),
-(44, 'Pregnancy Test Cassette ', 'Pregnancy Test Cassette (Get Sure)', 50.00, 'Product-Name_31644.webp', 30, 'No', 'Yes', 'No'),
-(45, 'VWash Plus Expert Intimate ', 'VWash Plus Expert Intimate Hygiene For Women- 100ml-', 399.00, 'Product-Name_64942.jpg', 30, 'No', 'Yes', 'No'),
-(46, 'Beauty Fruit Detox Plum ', 'Beauty Fruit Detox Plum For Body Sliming', 980.00, 'Product-Name_45999.jpg', 31, 'No', 'Yes', 'No'),
-(47, 'Bioflora', 'Bioflora', 750.00, 'Product-Name_78347.webp', 31, 'Yes', 'Yes', 'No'),
-(48, 'Centrum Silver Multivitamin', 'Centrum Silver Multivitamin for Multivitamin/Multimineral Supplement with Vitamin D3, B Vitamins and Antioxidants ', 2999.00, 'Product-Name_87932.jpg', 31, 'Yes', 'Yes', 'No'),
-(49, 'Ispergul', 'Ispergul', 400.00, 'Product-Name_92166.jpg', 31, 'Yes', 'No', 'No'),
-(50, 'Lemon Flavour ', 'Lemon Flavour (Box: 30 Pcs)', 450.00, 'Product-Name_93549.jpg', 31, 'No', 'Yes', 'No'),
-(51, 'Neo Cell Super Collagen', 'Neo Cell Super Collagen with Vitamin C', 3500.00, 'Product-Name_45145.jpg', 31, 'Yes', 'Yes', 'No'),
-(52, 'Rex', 'Rex 6mg+200mg+50m', 90.00, 'Product-Name_62372.jpg', 31, 'No', 'Yes', 'No'),
-(53, 'Acnovel Soap ', 'Acnovel Soap ', 480.00, 'Product-Name_21742.jpg', 29, 'Yes', 'Yes', 'No'),
-(54, 'Bioderma Pigmentbio', 'Bioderma Pigmentbio Daily Care SPF50+ 40ml', 2800.00, 'Product-Name_59753.gif', 29, 'Yes', 'Yes', 'No'),
-(55, 'Sleep Eye Mask', 'Sleep Eye Mask Eye Shade Eye Blindfold.Naturally Hypo-Allergenic So Is Great For Allergy Sufferers.', 470.00, 'Product-Name_28571.jpg', 29, 'No', 'Yes', 'No'),
-(56, 'Fresh Up Dental Floss', 'Fresh Up Dental Floss Mint Flavor (50m)', 85.00, 'Product-Name_90265.jpg', 29, 'Yes', 'Yes', 'No'),
-(57, 'Moov Cream ', 'Moov Cream 15', 180.00, 'Product-Name_68679.jpeg', 29, 'Yes', 'Yes', 'No'),
-(58, 'Moov Spray', 'Moov Spray', 720.00, 'Product-Name_33985.jpg', 29, 'No', 'No', 'No'),
-(59, 'Sensodyne Toothbrush ', 'Sensodyne Toothbrush Daily Care', 60.00, 'Product-Name_1638.jpeg', 29, 'No', 'No', 'No'),
-(60, 'Braces and Shoulder Support  Belt', 'Taylor\'s Brace Back Posture Corrector Braces and Shoulder Support Belt(A13) \r\n', 2140.00, 'Product-Name_9016.webp', 29, 'No', 'Yes', 'No'),
-(61, 'Ear Pick Cleaner Set', 'HEGRUS 6PCS Ear Pick Set Portable Ear Cleaner Set Stainless Steel Earpick Ear Wax Curette Remover Ear Cleaner.', 600.00, 'Product-Name_84255.jpg', 29, 'Yes', 'Yes', 'No'),
-(62, 'Adovas', 'Adovas 250 ml. This herbal cough syrup liquefies phlegm. It soothes irritation of the throat. Helps to relieve hoarseness. ', 63.00, 'Product-Name_92479.jpeg', 27, 'Yes', 'Yes', 'No'),
-(63, 'Alvasin', 'Alvasin is a unique combination of valuable medicinal plants for all types of cough and cold. The major ingredients of Alvasin is Vasaka.', 126.00, 'Product-Name_9775.jpg', 27, 'No', 'Yes', 'No'),
-(64, 'CINKARA', 'CINKARA-450-ML.  Cinkara is a non-alcoholic vitaminised herbal tonic of proven bioavailability in mental performance, anemia of pregnancy, lactating mother.', 67.00, 'Product-Name_30518.jpg', 27, 'Yes', 'Yes', 'No'),
-(65, 'Eprim softgel cap', 'Eprim softgel cap. prim softgel cap 500 mg. PMS symptoms, Cyclicalmastalgia, Atopic dermatitis, Low breast milk supply, Acne vulgaris, Pregnancy musk.', 189.00, 'Product-Name_67252.jpg', 27, 'No', 'No', 'No'),
-(66, 'Lactohil', 'Lactohil is a natural formula meant to promote the quality and quantity of milk. Lactohil is 100% safe and effective. It can be used as a tonic', 555.00, 'Product-Name_98011.jpg', 27, 'No', 'Yes', 'No'),
-(67, 'NAVIT CAP', 'Herbal Navit Capsule ; Indications. Spirulina is used for the treatment and prevention of malnutrition, diabetes, arthritis, asthma, hyperglycemia, anemia', 216.00, 'Product-Name_59773.jpg', 27, 'Yes', 'Yes', 'No'),
-(68, 'Peniton', 'This preparation strengthens the tissue, stimulates the nerves and muscles as well as the flow of blood in the male organ, thus providing it stiffness', 180.00, 'Product-Name_13660.jpg', 27, 'No', 'No', 'No'),
-(69, 'Radigel', 'Radigel Effervescent Powder (Container) ; Therapeutic Class. Bulk-forming laxatives', 385.00, 'Product-Name_80530.jpg', 27, 'Yes', 'Yes', 'No'),
-(70, 'RedClov', 'Red Clover Isoflavones is indicated for menopausal women, for the relief of menopause symptoms. It helps to relieve symptoms of menopause', 10.00, 'Product-Name_97431.jpg', 27, 'No', 'No', 'No'),
-(71, 'Safi', 'Hamdard Safi Syrup contains Sana, Sheesham, Sandal, Gilo, Harar, Chiraita, Nilkanthi, Neem, Tulsi, Chob chini, Keekar, Brahmi, Kasni', 180.00, 'Product-Name_18950.jpg', 27, 'Yes', 'Yes', 'No'),
-(72, 'Basok', 'ACME\'S BASOK syrup relieves allergic and dry irritable cough. It liquefies phlegm. It is very effective in asthma, smoker\'s cough and throat hoarseness.', 65.00, 'Product-Name_81798.jpg', 32, 'No', 'Yes', 'No'),
-(73, 'D-Sefa', 'Each soft gelatin capsule contains Black Seed Oil 500mg. Indication : D-Sefa is indicated for the treatment of common cold, cough, asthma', 63.00, 'Product-Name_21271.jpg', 32, 'No', 'Yes', 'No'),
-(74, 'Eredex', 'Eredex Capsule. Yohimbine Hydrochloride. 5.4 mg. Square Pharmaceuticals Ltd', 162.00, 'Product-Name_84026.jpg', 32, 'No', 'Yes', 'No'),
-(75, 'Frodex ', 'Frodex is a research product of Hamdard Laboratories and time tested aphrodisiac. Frodex is being used successfully to treat the patients of erectile', 438.00, 'Product-Name_28001.jpg', 32, 'No', 'Yes', 'No'),
-(76, 'Ginoba', 'Herbal Ginoba Capsule. Ginkgo Biloba. 60 mg. Radiant Nutraceuticals Ltd. ', 558.00, 'Product-Name_19762.jpg', 32, 'No', 'Yes', 'No'),
-(77, 'napa 500mg', 'napa 500mg Tablet Beximco Pharmaceuticals Ltd. Paracetamol is indicated for fever, common cold and influenza, headache, toothache, earache, bodyache, myalgia, neuralgia, dysmenorrhoea, sprains', 7.00, 'Product-Name_28331.jpg', 32, 'No', 'Yes', 'No'),
-(78, 'Tufnil', 'Tufnil Tablet 200 mg (10pcs) ; Indications. Tolfenamic acid is used specifically for relieving the pain of migraine headaches and also recommended for use.', 80.00, 'Product-Name_68078.png', 32, 'Yes', 'Yes', 'No'),
-(79, 'Pink-Lemonade', 'Country-Time-Pink-Lemonade-538gm.Weight: 538gm; Specialty: Gluten-Free, Caffeine Free; Country of origin:USA', 1280.00, 'Product-Name_23009.jpg', 28, 'No', 'Yes', 'No'),
-(80, 'Dabur Honey', 'abur Honey is widely considered as one of the best cough remedy & often termed as \'the\' Honey for Weight Loss – One of the Best Honey Brand in India', 200.00, 'Product-Name_14688.jpg', 28, 'Yes', 'Yes', 'No'),
-(81, 'ENO ', 'Eno Lemon Flavoured Powder, 5 gm ; Consume Type. ORAL ; Description. Get fast relief from acidity with ENO that starts working in just 6 seconds.', 15.00, 'Product-Name_86824.webp', 28, 'No', 'Yes', 'No'),
-(82, 'GlucomaxD', 'GlucomaxD is a non-flavoured energy drink that can be used by children and adults alike. It helps in maintaining an active lifestyle for sports person', 145.00, 'Product-Name_54037.png', 28, 'No', 'Yes', 'No');
+INSERT INTO `tbl_product` (`id`, `title`, `description`, `price`, `image_name`, `category_id`, `featured`, `active`, `requires_prescription`, `stock_qty`) VALUES
+(21, 'Jhonson\'s Baby Shampoo', 'Jhonson\'s Baby Shampoo 200ml\r\nWash baby\'s hair with Johnson\'s® hypoallergenic and tear-free baby shampoo to gently cleanse and leave baby\'s hair fresh and shiny.', 299.00, 'Product-Name_73904.jpg', 25, 'No', 'Yes', 'No', 50),
+(22, 'Huggies Wonder Pants Diaper', 'Diaper pants with 3-D Bubble-Bed provides ultimate cottony softness to your baby’s skin.', 1000.00, 'Product-Name_84631.webp', 25, 'No', 'Yes', 'No', 50),
+(23, 'Kids Brush', 'Kids U-Shape Silicon Brush', 350.00, 'Product-Name_83418.jpg', 25, 'Yes', 'Yes', 'No', 50),
+(24, 'Flashlight Earpick', 'LED Light Ear Cleaner Flashlight Earpick', 250.00, 'Product-Name_11140.jpg', 25, 'No', 'Yes', 'No', 50),
+(25, 'Nestlé Cerelac', 'Nestlé Cerelac 3 Wheat _ Three Fruits Baby Food BIB ', 350.00, 'Product-Name_3966.jpg', 25, 'No', 'No', 'No', 50),
+(26, 'Nestlé Lactogen', 'Nestlé Lactogen 1 Infant Formula TIN', 650.00, 'Product-Name_32473.jpg', 25, 'No', 'Yes', 'No', 50),
+(27, 'Nestlé Milk Powder', 'Nestlé Nido 1+ Milk Powder (1-3 years)350gm', 375.00, 'Product-Name_80671.jpg', 25, 'No', 'Yes', 'No', 50),
+(28, 'Pampers', 'Pampers All Round Protection Pants-L', 1599.00, 'Product-Name_48851.jpg', 25, 'Yes', 'Yes', 'No', 50),
+(29, 'Pozzy Wet Wipes', 'Pozzy Comfort Cotton Wet Wipes', 235.00, 'Product-Name_5713.webp', 25, 'No', 'Yes', 'No', 50),
+(30, 'Baby Spoon', 'Silicone Feeding Spoon For Baby', 180.00, 'Product-Name_20514.jpg', 25, 'No', 'Yes', 'No', 50),
+(32, 'Blood Glucometer', 'Accu Chek Active Blood Glucometer', 2300.00, 'Product-Name_77314.jpg', 26, 'Yes', 'Yes', 'No', 50),
+(33, 'Blood Lancet Needles', 'Blood Lancet Needles For Diabetes(30g)', 115.00, 'Product-Name_35022.jpg', 26, 'Yes', 'Yes', 'No', 50),
+(34, 'Hot Water Bag', 'Hot Water Bag (Medium Size)With Cover ', 250.00, 'Product-Name_63938.jpg', 26, 'No', 'Yes', 'No', 50),
+(35, 'Reusable Insulin Pen', 'Novopen 4 Silver Reusable Insulin Pen', 590.00, 'Product-Name_28613.webp', 26, 'Yes', 'Yes', 'No', 50),
+(36, 'Thermometer Digital LCD', 'Thermometer Digital LCD', 120.00, 'Product-Name_1319.jpg', 26, 'Yes', 'Yes', 'No', 50),
+(37, 'Uptech Go', 'Uptech Go(AERO SPACER)Adult', 369.00, 'Product-Name_32636.jpg', 26, 'Yes', 'Yes', 'No', 50),
+(38, ' SANITARY NAPKIN', 'WHISPER MAXI FIT SANITARY NAPKIN (15 PADS)', 250.00, 'Product-Name_93820.webp', 30, 'No', 'Yes', 'No', 50),
+(39, 'Femicon', 'Femicon', 32.00, 'Product-Name_67038.png', 30, 'No', 'No', 'No', 50),
+(40, 'Sanitary Napkin ', 'Freedom Savlon Sanitary Napkin (Heavy Flow Wings)', 200.00, 'Product-Name_95902.jpg', 30, 'No', 'No', 'No', 50),
+(41, 'Himalaya Shatavari ', 'Himalaya Shatavari Women_s Wellness', 650.00, 'Product-Name_24801.webp', 30, 'Yes', 'No', 'No', 50),
+(42, 'Menstrual Cup', 'Menstrual Cup for Women Hygiene During Period Icare Cup', 1150.00, 'Product-Name_82195.webp', 30, 'No', 'Yes', 'No', 50),
+(43, 'Minicon', 'Minicon', 36.00, 'Product-Name_3327.png', 30, 'No', 'No', 'No', 50),
+(44, 'Pregnancy Test Cassette ', 'Pregnancy Test Cassette (Get Sure)', 50.00, 'Product-Name_31644.webp', 30, 'No', 'Yes', 'No', 50),
+(45, 'VWash Plus Expert Intimate ', 'VWash Plus Expert Intimate Hygiene For Women- 100ml-', 399.00, 'Product-Name_64942.jpg', 30, 'No', 'Yes', 'No', 50),
+(46, 'Beauty Fruit Detox Plum ', 'Beauty Fruit Detox Plum For Body Sliming', 980.00, 'Product-Name_45999.jpg', 31, 'No', 'Yes', 'No', 50),
+(47, 'Bioflora', 'Bioflora', 750.00, 'Product-Name_78347.webp', 31, 'Yes', 'Yes', 'No', 50),
+(48, 'Centrum Silver Multivitamin', 'Centrum Silver Multivitamin for Multivitamin/Multimineral Supplement with Vitamin D3, B Vitamins and Antioxidants ', 2999.00, 'Product-Name_87932.jpg', 31, 'Yes', 'Yes', 'No', 50),
+(49, 'Ispergul', 'Ispergul', 400.00, 'Product-Name_92166.jpg', 31, 'Yes', 'No', 'No', 50),
+(50, 'Lemon Flavour ', 'Lemon Flavour (Box: 30 Pcs)', 450.00, 'Product-Name_93549.jpg', 31, 'No', 'Yes', 'No', 50),
+(51, 'Neo Cell Super Collagen', 'Neo Cell Super Collagen with Vitamin C', 3500.00, 'Product-Name_45145.jpg', 31, 'Yes', 'Yes', 'No', 50),
+(52, 'Rex', 'Rex 6mg+200mg+50m', 90.00, 'Product-Name_62372.jpg', 31, 'No', 'Yes', 'No', 50),
+(53, 'Acnovel Soap ', 'Acnovel Soap ', 480.00, 'Product-Name_21742.jpg', 29, 'Yes', 'Yes', 'No', 50),
+(54, 'Bioderma Pigmentbio', 'Bioderma Pigmentbio Daily Care SPF50+ 40ml', 2800.00, 'Product-Name_59753.gif', 29, 'Yes', 'Yes', 'No', 50),
+(55, 'Sleep Eye Mask', 'Sleep Eye Mask Eye Shade Eye Blindfold.Naturally Hypo-Allergenic So Is Great For Allergy Sufferers.', 470.00, 'Product-Name_28571.jpg', 29, 'No', 'Yes', 'No', 50),
+(56, 'Fresh Up Dental Floss', 'Fresh Up Dental Floss Mint Flavor (50m)', 85.00, 'Product-Name_90265.jpg', 29, 'Yes', 'Yes', 'No', 50),
+(57, 'Moov Cream ', 'Moov Cream 15', 180.00, 'Product-Name_68679.jpeg', 29, 'Yes', 'Yes', 'No', 50),
+(58, 'Moov Spray', 'Moov Spray', 720.00, 'Product-Name_33985.jpg', 29, 'No', 'No', 'No', 50),
+(59, 'Sensodyne Toothbrush ', 'Sensodyne Toothbrush Daily Care', 60.00, 'Product-Name_1638.jpeg', 29, 'No', 'No', 'No', 50),
+(60, 'Braces and Shoulder Support  Belt', 'Taylor\'s Brace Back Posture Corrector Braces and Shoulder Support Belt(A13) \r\n', 2140.00, 'Product-Name_9016.webp', 29, 'No', 'Yes', 'No', 50),
+(61, 'Ear Pick Cleaner Set', 'HEGRUS 6PCS Ear Pick Set Portable Ear Cleaner Set Stainless Steel Earpick Ear Wax Curette Remover Ear Cleaner.', 600.00, 'Product-Name_84255.jpg', 29, 'Yes', 'Yes', 'No', 50),
+(62, 'Adovas', 'Adovas 250 ml. This herbal cough syrup liquefies phlegm. It soothes irritation of the throat. Helps to relieve hoarseness. ', 63.00, 'Product-Name_92479.jpeg', 27, 'Yes', 'Yes', 'No', 50),
+(63, 'Alvasin', 'Alvasin is a unique combination of valuable medicinal plants for all types of cough and cold. The major ingredients of Alvasin is Vasaka.', 126.00, 'Product-Name_9775.jpg', 27, 'No', 'Yes', 'No', 50),
+(64, 'CINKARA', 'CINKARA-450-ML.  Cinkara is a non-alcoholic vitaminised herbal tonic of proven bioavailability in mental performance, anemia of pregnancy, lactating mother.', 67.00, 'Product-Name_30518.jpg', 27, 'Yes', 'Yes', 'No', 50),
+(65, 'Eprim softgel cap', 'Eprim softgel cap. prim softgel cap 500 mg. PMS symptoms, Cyclicalmastalgia, Atopic dermatitis, Low breast milk supply, Acne vulgaris, Pregnancy musk.', 189.00, 'Product-Name_67252.jpg', 27, 'No', 'No', 'No', 50),
+(66, 'Lactohil', 'Lactohil is a natural formula meant to promote the quality and quantity of milk. Lactohil is 100% safe and effective. It can be used as a tonic', 555.00, 'Product-Name_98011.jpg', 27, 'No', 'Yes', 'No', 50),
+(67, 'NAVIT CAP', 'Herbal Navit Capsule ; Indications. Spirulina is used for the treatment and prevention of malnutrition, diabetes, arthritis, asthma, hyperglycemia, anemia', 216.00, 'Product-Name_59773.jpg', 27, 'Yes', 'Yes', 'No', 50),
+(68, 'Peniton', 'This preparation strengthens the tissue, stimulates the nerves and muscles as well as the flow of blood in the male organ, thus providing it stiffness', 180.00, 'Product-Name_13660.jpg', 27, 'No', 'No', 'No', 50),
+(69, 'Radigel', 'Radigel Effervescent Powder (Container) ; Therapeutic Class. Bulk-forming laxatives', 385.00, 'Product-Name_80530.jpg', 27, 'Yes', 'Yes', 'No', 50),
+(70, 'RedClov', 'Red Clover Isoflavones is indicated for menopausal women, for the relief of menopause symptoms. It helps to relieve symptoms of menopause', 10.00, 'Product-Name_97431.jpg', 27, 'No', 'No', 'No', 50),
+(71, 'Safi', 'Hamdard Safi Syrup contains Sana, Sheesham, Sandal, Gilo, Harar, Chiraita, Nilkanthi, Neem, Tulsi, Chob chini, Keekar, Brahmi, Kasni', 180.00, 'Product-Name_18950.jpg', 27, 'Yes', 'Yes', 'No', 50),
+(72, 'Basok', 'ACME\'S BASOK syrup relieves allergic and dry irritable cough. It liquefies phlegm. It is very effective in asthma, smoker\'s cough and throat hoarseness.', 65.00, 'Product-Name_81798.jpg', 32, 'No', 'Yes', 'No', 50),
+(73, 'D-Sefa', 'Each soft gelatin capsule contains Black Seed Oil 500mg. Indication : D-Sefa is indicated for the treatment of common cold, cough, asthma', 63.00, 'Product-Name_21271.jpg', 32, 'No', 'Yes', 'No', 50),
+(74, 'Eredex', 'Eredex Capsule. Yohimbine Hydrochloride. 5.4 mg. Square Pharmaceuticals Ltd', 162.00, 'Product-Name_84026.jpg', 32, 'No', 'Yes', 'No', 50),
+(75, 'Frodex ', 'Frodex is a research product of Hamdard Laboratories and time tested aphrodisiac. Frodex is being used successfully to treat the patients of erectile', 438.00, 'Product-Name_28001.jpg', 32, 'No', 'Yes', 'No', 50),
+(76, 'Ginoba', 'Herbal Ginoba Capsule. Ginkgo Biloba. 60 mg. Radiant Nutraceuticals Ltd. ', 558.00, 'Product-Name_19762.jpg', 32, 'No', 'Yes', 'No', 50),
+(77, 'napa 500mg', 'napa 500mg Tablet Beximco Pharmaceuticals Ltd. Paracetamol is indicated for fever, common cold and influenza, headache, toothache, earache, bodyache, myalgia, neuralgia, dysmenorrhoea, sprains', 7.00, 'Product-Name_28331.jpg', 32, 'No', 'Yes', 'No', 50),
+(78, 'Tufnil', 'Tufnil Tablet 200 mg (10pcs) ; Indications. Tolfenamic acid is used specifically for relieving the pain of migraine headaches and also recommended for use.', 80.00, 'Product-Name_68078.png', 32, 'Yes', 'Yes', 'No', 50),
+(79, 'Pink-Lemonade', 'Country-Time-Pink-Lemonade-538gm.Weight: 538gm; Specialty: Gluten-Free, Caffeine Free; Country of origin:USA', 1280.00, 'Product-Name_23009.jpg', 28, 'No', 'Yes', 'No', 50),
+(80, 'Dabur Honey', 'abur Honey is widely considered as one of the best cough remedy & often termed as \'the\' Honey for Weight Loss – One of the Best Honey Brand in India', 200.00, 'Product-Name_14688.jpg', 28, 'Yes', 'Yes', 'No', 50),
+(81, 'ENO ', 'Eno Lemon Flavoured Powder, 5 gm ; Consume Type. ORAL ; Description. Get fast relief from acidity with ENO that starts working in just 6 seconds.', 15.00, 'Product-Name_86824.webp', 28, 'No', 'Yes', 'No', 50),
+(82, 'GlucomaxD', 'GlucomaxD is a non-flavoured energy drink that can be used by children and adults alike. It helps in maintaining an active lifestyle for sports person', 145.00, 'Product-Name_54037.png', 28, 'No', 'Yes', 'No', 50);
 
 -- --------------------------------------------------------
 
@@ -371,7 +375,7 @@ ALTER TABLE `tbl_review`
 -- AUTO_INCREMENT for table `tbl_wishlist`
 --
 ALTER TABLE `tbl_wishlist`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Constraints for dumped tables

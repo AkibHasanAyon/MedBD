@@ -56,7 +56,7 @@
     <div class="container">
         <div class="logo">
             <a href="<?php echo SITEURL; ?>" title="Logo">
-                <img src="<?php echo SITEURL; ?>images/MedBdLogo.png" alt="MEDbd Logo">
+                <img src="<?php echo SITEURL; ?>images/MedBdLogo.png?v=<?php echo time(); ?>" alt="MEDbd Logo">
             </a>
         </div>
 
