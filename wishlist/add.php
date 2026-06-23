@@ -1,5 +1,5 @@
 <?php
-include('config/constants.php');
+include('../config/constants.php');
 
 if (!isset($_SESSION['customer_id'])) {
     $_SESSION['customer-login-msg'] = "<div class='auth-message error'>Please login to add items to your wishlist.</div>";

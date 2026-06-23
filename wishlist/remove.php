@@ -1,5 +1,5 @@
 <?php
-include('config/constants.php');
+include('../config/constants.php');
 
 if (!isset($_SESSION['customer_id'])) {
     header('location:' . SITEURL . 'customer/login.php');
@@ -20,6 +20,6 @@ if (isset($_GET['id'])) {
     }
 }
 
-header('location:' . SITEURL . 'wishlist.php');
+header('location:' . SITEURL . 'wishlist/');
 exit();
 ?>

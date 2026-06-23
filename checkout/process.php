@@ -1,5 +1,5 @@
 <?php
-include('config/constants.php');
+include('../config/constants.php');
 
 if (!isset($_SESSION['customer_id'])) {
     header('location:' . SITEURL . 'customer/login.php');
@@ -131,12 +131,12 @@ if (isset($_POST['submit'])) {
     if ($payment_method == "Stripe") {
         // Redirect to Stripe Checkout page
         $order_ids_str = implode(',', $order_ids);
-        header('location:' . SITEURL . 'stripe-checkout.php?order_ids=' . $order_ids_str . '&amount=' . ($total_amount * 100));
+        header('location:' . SITEURL . 'checkout/stripe.php?order_ids=' . $order_ids_str . '&amount=' . ($total_amount * 100));
         exit();
     } else {
         // Cash on delivery
         // Send email
-        include('send_order_email.php');
+        include('checkout/send-email.php');
         sendOrderConfirmationEmail($customer_email, $customer_name, $order_ids);
 
         $_SESSION['success'] = "Order Placed Successfully! Your order will be delivered soon.";

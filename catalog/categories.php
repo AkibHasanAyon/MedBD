@@ -1,4 +1,4 @@
-<?php include('partials-front/menu.php'); ?>
+<?php include('../partials-front/menu.php'); ?>
 
 <!-- Categories Section Starts Here -->
 <section class="categories">
@@ -41,4 +41,4 @@
 <!-- Categories Section Ends Here -->
 
 
-<?php include('partials-front/footer.php'); ?>
+<?php include('../partials-front/footer.php'); ?>

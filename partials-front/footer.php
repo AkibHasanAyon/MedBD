@@ -23,14 +23,14 @@
             <a href="#">Delivery information</a>
             <a href="#">Privacy Policy</a>
             <a href="#">Terms & Conditions</a>
-            <a href="<?php echo SITEURL; ?>contact.php">Contact Us</a>
+            <a href="<?php echo SITEURL; ?>pages/contact.php">Contact Us</a>
         </div>
         <div class="col">
             <h4>My Account</h4>
             <?php if(isset($_SESSION['customer_id'])): ?>
                 <a href="<?php echo SITEURL; ?>customer/profile.php">My Profile</a>
-                <a href="<?php echo SITEURL; ?>cart.php">View Cart</a>
-                <a href="<?php echo SITEURL; ?>wishlist.php">My Wishlist</a>
+                <a href="<?php echo SITEURL; ?>cart/">View Cart</a>
+                <a href="<?php echo SITEURL; ?>wishlist/">My Wishlist</a>
                 <a href="<?php echo SITEURL; ?>customer/my-orders.php">Track My Order</a>
                 <a href="<?php echo SITEURL; ?>customer/logout.php">Logout</a>
             <?php else: ?>

@@ -1,26 +1,57 @@
-<?php include('partials-front/menu.php'); ?>
+<?php include('../partials-front/menu.php'); ?>
+
+<?php
+       //Check whether id is passed or not
+       if(isset($_GET['category_id']))
+       {
+           //category id set and get the id
+           $category_id=(int)$_GET['category_id'];
+           //Get the category title based on category id
+
+           $sql="SELECT title FROM tbl_category WHERE id=$category_id";
+         
+
+          //Execute the query
+          $res=mysqli_query($conn, $sql);
+          //get the values from database
+          $row=mysqli_fetch_assoc($res);
+
+          //Get the title
+          $category_title=$row['title'];
+
+
+
+
+       }
+       else
+       {
+           //category passed
+           //Redirect to home page 
+           header('location:'.SITEURL);
+       }
+
+
+   ?>
+
 
 <!-- Hero / Search Section -->
 <section class="hero-section" style="padding: 4% 0;">
     <div class="container">
-        <form action="<?php echo SITEURL;?>product-search.php" method="POST" class="search-box">
-            <input type="search" name="search" placeholder="Search for products, brands, or categories..." required>
-            <button type="submit" name="submit" class="btn-search"><i class='bx bx-search'></i> Search</button>
-        </form>
+        <h1><?php echo htmlspecialchars($category_title); ?></h1>
     </div>
 </section>
 
 <!-- Product Menu Section -->
 <section class="product-menu">
     <div class="container">
-        <h2 class="text-center">All Products</h2>
+        <h2 class="text-center">Products in <?php echo htmlspecialchars($category_title); ?></h2>
         
         <div class="product-grid">
             <?php 
-            $sql="SELECT * FROM tbl_product WHERE active='Yes'";
-            $res=mysqli_query($conn, $sql);
-            if(mysqli_num_rows($res) > 0) {
-                while($row=mysqli_fetch_assoc($res)) {
+            $sql2="SELECT * FROM tbl_product WHERE category_id=$category_id";
+            $res2=mysqli_query($conn, $sql2);
+            if(mysqli_num_rows($res2) > 0) {
+                while($row=mysqli_fetch_assoc($res2)) {
                     $id=$row['id'];
                     $title=$row['title'];
                     $price=$row['price'];
@@ -37,7 +68,7 @@
                         </div>
 
                         <div class="product-info">
-                            <a href="<?php echo SITEURL; ?>product-detail.php?id=<?php echo $id; ?>">
+                            <a href="<?php echo SITEURL; ?>catalog/detail.php?id=<?php echo $id; ?>">
                                 <div class="product-title"><?php echo $title; ?></div>
                             </a>
                             
@@ -61,20 +92,21 @@
                             <div class="product-desc"><?php echo $description; ?></div>
                             
                             <div class="product-actions">
-                                <a href="<?php echo SITEURL; ?>add-to-cart.php?product_id=<?php echo $id; ?>" class="btn-icon" title="Add to Cart">
+                                <a href="<?php echo SITEURL; ?>cart/add.php?product_id=<?php echo $id; ?>" class="btn-icon" title="Add to Cart">
                                     <i class='bx bx-cart-add' style="font-size: 22px;"></i>
                                 </a>
-                                <a href="<?php echo SITEURL; ?>order.php?product_id=<?php echo $id; ?>" class="btn-buy">Buy Now</a>
+                                <a href="<?php echo SITEURL; ?>checkout/?product_id=<?php echo $id; ?>" class="btn-buy">Buy Now</a>
                             </div>
                         </div>
                     </div>
                     <?php
                 }
             } else {
-                echo "<div class='error text-center'>Products Not Available.</div>";
+                echo "<div class='error text-center'>No products found in this category.</div>";
             }
             ?>
         </div>
     </div>
 </section>
-<?php include('partials-front/footer.php'); ?>
+
+<?php include('../partials-front/footer.php'); ?>

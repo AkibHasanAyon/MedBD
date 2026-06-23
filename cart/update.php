@@ -1,5 +1,5 @@
 <?php
-include('config/constants.php');
+include('../config/constants.php');
 
 if (!isset($_SESSION['customer_id'])) {
     header('location:' . SITEURL . 'customer/login.php');
@@ -27,6 +27,6 @@ if (isset($_POST['update'])) {
     }
 }
 
-header('location:' . SITEURL . 'cart.php');
+header('location:' . SITEURL . 'cart/');
 exit();
 ?>

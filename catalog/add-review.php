@@ -1,5 +1,5 @@
 <?php
-include('config/constants.php');
+include('../config/constants.php');
 
 if (!isset($_SESSION['customer_id'])) {
     $_SESSION['customer-login-msg'] = "<div class='auth-message error'>Please login to write a review.</div>";

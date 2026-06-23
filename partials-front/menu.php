@@ -62,8 +62,8 @@
         <div class="menu">
             <ul>
                 <li><a href="<?php echo SITEURL; ?>" class="nav-link"><i class='bx bx-home nav-icon'></i> Home</a></li>
-                <li><a href="<?php echo SITEURL; ?>categories.php" class="nav-link"><i class='bx bx-category nav-icon'></i> Categories</a></li>
-                <li><a href="<?php echo SITEURL; ?>product.php" class="nav-link"><i class='bx bx-store-alt nav-icon'></i> Products</a></li>
+                <li><a href="<?php echo SITEURL; ?>catalog/categories.php" class="nav-link"><i class='bx bx-category nav-icon'></i> Categories</a></li>
+                <li><a href="<?php echo SITEURL; ?>catalog/products.php" class="nav-link"><i class='bx bx-store-alt nav-icon'></i> Products</a></li>
                 
                 <li class="user-dropdown">
                     <?php if(isset($_SESSION['customer_id'])): ?>
@@ -74,8 +74,8 @@
                         <div class="dropdown-menu">
                             <a href="<?php echo SITEURL; ?>customer/profile.php"><i class='bx bx-user'></i> My Profile</a>
                             <a href="<?php echo SITEURL; ?>customer/my-orders.php"><i class='bx bx-receipt'></i> My Orders</a>
-                            <a href="<?php echo SITEURL; ?>wishlist.php"><i class='bx bx-heart'></i> Wishlist</a>
-                            <a href="<?php echo SITEURL; ?>cart.php"><i class='bx bx-cart'></i> Shopping Cart 
+                            <a href="<?php echo SITEURL; ?>wishlist/"><i class='bx bx-heart'></i> Wishlist</a>
+                            <a href="<?php echo SITEURL; ?>cart/"><i class='bx bx-cart'></i> Shopping Cart 
                                 <?php
                                     $cart_sql = "SELECT SUM(qty) as total_items FROM tbl_cart WHERE customer_id=".(int)$_SESSION['customer_id'];
                                     $cart_res = mysqli_query($conn, $cart_sql);

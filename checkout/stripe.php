@@ -1,5 +1,5 @@
 <?php
-include('config/constants.php');
+include('../config/constants.php');
 
 if (!isset($_SESSION['customer_id']) || !isset($_GET['order_ids']) || !isset($_GET['amount'])) {
     header('location:' . SITEURL);

@@ -1,5 +1,5 @@
 <?php 
-include('config/constants.php');
+include('../config/constants.php');
 
 // Check if customer is logged in
 if (!isset($_SESSION['customer_id'])) {
@@ -40,7 +40,7 @@ if (isset($_GET['product_id'])) {
 if (isset($_SERVER['HTTP_REFERER'])) {
     header('location:' . $_SERVER['HTTP_REFERER']);
 } else {
-    header('location:' . SITEURL . 'product.php');
+    header('location:' . SITEURL . 'catalog/products.php');
 }
 exit();
 ?>

@@ -1,4 +1,4 @@
-<?php include('partials-front/menu.php'); ?>
+<?php include('../partials-front/menu.php'); ?>
 
 <!-- product sEARCH Section Starts Here -->
 <section class="product-search text-center">
@@ -72,7 +72,7 @@
             </div>
 
             <div class="product-menu-desc">
-                <a href="<?php echo SITEURL; ?>product-detail.php?id=<?php echo $id; ?>" style="text-decoration:none;">
+                <a href="<?php echo SITEURL; ?>catalog/detail.php?id=<?php echo $id; ?>" style="text-decoration:none;">
                     <h4 style="color:#155e58;"><?php echo $title;?></h4>
                 </a>
                 
@@ -99,8 +99,8 @@
                 </p>
                 <br>
 
-                <a href="<?php echo SITEURL; ?>add-to-cart.php?product_id=<?php echo $id; ?>" class="btn btn-primary" style="background:#155e58; border:none; margin-right:5px;">Add to Cart</a>
-                <a href="<?php echo SITEURL; ?>order.php?product_id=<?php echo $id; ?>" class="btn btn-primary">Buy Now</a>
+                <a href="<?php echo SITEURL; ?>cart/add.php?product_id=<?php echo $id; ?>" class="btn btn-primary" style="background:#155e58; border:none; margin-right:5px;">Add to Cart</a>
+                <a href="<?php echo SITEURL; ?>checkout/?product_id=<?php echo $id; ?>" class="btn btn-primary">Buy Now</a>
             </div>
         </div>
 
@@ -130,4 +130,4 @@
 
 </section>
 <!-- product Menu Section Ends Here -->
-<?php include('partials-front/footer.php'); ?>
+<?php include('../partials-front/footer.php'); ?>

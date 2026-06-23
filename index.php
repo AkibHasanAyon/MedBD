@@ -102,7 +102,7 @@
                         </div>
 
                         <div class="product-info">
-                            <a href="<?php echo SITEURL; ?>product-detail.php?id=<?php echo $id; ?>">
+                            <a href="<?php echo SITEURL; ?>catalog/detail.php?id=<?php echo $id; ?>">
                                 <div class="product-title"><?php echo $title; ?></div>
                             </a>
                             
@@ -126,10 +126,10 @@
                             <div class="product-desc"><?php echo $description; ?></div>
                             
                             <div class="product-actions">
-                                <a href="<?php echo SITEURL; ?>add-to-cart.php?product_id=<?php echo $id; ?>" class="btn-icon" title="Add to Cart">
+                                <a href="<?php echo SITEURL; ?>cart/add.php?product_id=<?php echo $id; ?>" class="btn-icon" title="Add to Cart">
                                     <i class='bx bx-cart-add' style="font-size: 22px;"></i>
                                 </a>
-                                <a href="<?php echo SITEURL; ?>order.php?product_id=<?php echo $id; ?>" class="btn-buy">Buy Now</a>
+                                <a href="<?php echo SITEURL; ?>checkout/?product_id=<?php echo $id; ?>" class="btn-buy">Buy Now</a>
                             </div>
                         </div>
                     </div>
@@ -142,7 +142,7 @@
         </div>
         
         <div class="text-center" style="margin-top: 50px;">
-            <a href="<?php echo SITEURL; ?>product.php" class="btn btn-primary" style="padding: 12px 30px; font-size: 16px;">View All Products <i class='bx bx-right-arrow-alt' style="vertical-align: middle;"></i></a>
+            <a href="<?php echo SITEURL; ?>catalog/products.php" class="btn btn-primary" style="padding: 12px 30px; font-size: 16px;">View All Products <i class='bx bx-right-arrow-alt' style="vertical-align: middle;"></i></a>
         </div>
     </div>
 </section>

@@ -1,4 +1,4 @@
-<?php include('partials-front/menu.php'); ?>
+<?php include('../partials-front/menu.php'); ?>
 
 <?php
 if (!isset($_SESSION['customer_id'])) {
@@ -33,7 +33,7 @@ $customer_id = (int)$_SESSION['customer_id'];
                 $image_name = $row['image_name'];
         ?>
                 <div style="background: #fff; border-radius: 8px; padding: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); position: relative;">
-                    <a href="<?php echo SITEURL; ?>remove-from-wishlist.php?id=<?php echo $wishlist_id; ?>" style="position: absolute; top: 10px; right: 10px; color: #e74c3c; font-size: 20px; text-decoration: none;" title="Remove from Wishlist"><i class='bx bx-x-circle'></i></a>
+                    <a href="<?php echo SITEURL; ?>wishlist/remove.php?id=<?php echo $wishlist_id; ?>" style="position: absolute; top: 10px; right: 10px; color: #e74c3c; font-size: 20px; text-decoration: none;" title="Remove from Wishlist"><i class='bx bx-x-circle'></i></a>
                     
                     <div style="text-align: center; margin-bottom: 15px;">
                         <?php if ($image_name != ""): ?>
@@ -44,12 +44,12 @@ $customer_id = (int)$_SESSION['customer_id'];
                     </div>
                     
                     <h4 style="color: #155e58; text-align: center; margin-bottom: 5px;">
-                        <a href="<?php echo SITEURL; ?>product-detail.php?id=<?php echo $product_id; ?>" style="color: inherit; text-decoration: none;"><?php echo htmlspecialchars($title); ?></a>
+                        <a href="<?php echo SITEURL; ?>catalog/detail.php?id=<?php echo $product_id; ?>" style="color: inherit; text-decoration: none;"><?php echo htmlspecialchars($title); ?></a>
                     </h4>
                     
                     <p style="text-align: center; font-weight: bold; color: #e65100; font-size: 18px; margin-bottom: 15px;">৳<?php echo $price; ?></p>
                     
-                    <a href="<?php echo SITEURL; ?>add-to-cart.php?product_id=<?php echo $product_id; ?>" style="display: block; text-align: center; padding: 10px; background: #155e58; color: white; text-decoration: none; border-radius: 4px; font-weight: bold;">Add to Cart</a>
+                    <a href="<?php echo SITEURL; ?>cart/add.php?product_id=<?php echo $product_id; ?>" style="display: block; text-align: center; padding: 10px; background: #155e58; color: white; text-decoration: none; border-radius: 4px; font-weight: bold;">Add to Cart</a>
                 </div>
         <?php
             }
@@ -64,4 +64,4 @@ $customer_id = (int)$_SESSION['customer_id'];
     </div>
 </section>
 
-<?php include('partials-front/footer.php'); ?>
+<?php include('../partials-front/footer.php'); ?>

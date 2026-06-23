@@ -1,4 +1,4 @@
-<?php include('partials-front/menu.php'); ?>
+<?php include('../partials-front/menu.php'); ?>
 
 <?php
 if (isset($_GET['id'])) {
@@ -9,11 +9,11 @@ if (isset($_GET['id'])) {
     if (mysqli_num_rows($res) == 1) {
         $product = mysqli_fetch_assoc($res);
     } else {
-        header('location:' . SITEURL . 'product.php');
+        header('location:' . SITEURL . 'catalog/products.php');
         exit();
     }
 } else {
-    header('location:' . SITEURL . 'product.php');
+    header('location:' . SITEURL . 'catalog/products.php');
     exit();
 }
 
@@ -73,9 +73,9 @@ if ($rev_count > 0) {
             <?php endif; ?>
 
             <div style="display: flex; gap: 15px;">
-                <a href="<?php echo SITEURL; ?>add-to-cart.php?product_id=<?php echo $product_id; ?>" style="padding: 15px 30px; background: #155e58; color: white; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 16px;">Add to Cart</a>
-                <a href="<?php echo SITEURL; ?>order.php?product_id=<?php echo $product_id; ?>" style="padding: 15px 30px; background: #15c293; color: white; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 16px;">Buy Now</a>
-                <a href="<?php echo SITEURL; ?>add-to-wishlist.php?product_id=<?php echo $product_id; ?>" style="padding: 15px 20px; background: #fdfdfd; color: #e74c3c; border: 2px solid #e74c3c; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 16px;" title="Add to Wishlist"><i class='bx bxs-heart'></i></a>
+                <a href="<?php echo SITEURL; ?>cart/add.php?product_id=<?php echo $product_id; ?>" style="padding: 15px 30px; background: #155e58; color: white; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 16px;">Add to Cart</a>
+                <a href="<?php echo SITEURL; ?>checkout/?product_id=<?php echo $product_id; ?>" style="padding: 15px 30px; background: #15c293; color: white; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 16px;">Buy Now</a>
+                <a href="<?php echo SITEURL; ?>wishlist/add.php?product_id=<?php echo $product_id; ?>" style="padding: 15px 20px; background: #fdfdfd; color: #e74c3c; border: 2px solid #e74c3c; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 16px;" title="Add to Wishlist"><i class='bx bxs-heart'></i></a>
             </div>
         </div>
     </div>
@@ -150,4 +150,4 @@ if ($rev_count > 0) {
 
 </section>
 
-<?php include('partials-front/footer.php'); ?>
+<?php include('../partials-front/footer.php'); ?>
