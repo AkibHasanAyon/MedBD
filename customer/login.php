@@ -33,7 +33,10 @@
             </div>
 
             <div class="form-group">
-                <label>Password</label>
+                <label style="display: flex; justify-content: space-between;">
+                    Password
+                    <a href="<?php echo SITEURL; ?>customer/forgot-password.php" style="font-size: 13px; font-weight: normal; color: #155e58;">Forgot Password?</a>
+                </label>
                 <input type="password" name="password" placeholder="Enter your password" required class="form-control">
             </div>
 
@@ -63,6 +66,14 @@ if (isset($_POST['submit'])) {
 
         // Verify password (bcrypt)
         if (password_verify($password, $row['password'])) {
+            
+            // Check if verified
+            if ($row['is_verified'] == 0) {
+                $_SESSION['verify-email'] = $row['email'];
+                header('location:' . SITEURL . 'customer/resend-otp.php');
+                exit();
+            }
+
             // Login success
             $_SESSION['customer_id'] = $row['id'];
             $_SESSION['customer_name'] = $row['full_name'];

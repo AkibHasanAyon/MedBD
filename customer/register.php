@@ -100,26 +100,41 @@ if (isset($_POST['submit'])) {
     // Hash password with bcrypt
     $hashed_password = password_hash($password, PASSWORD_BCRYPT);
 
+    // Generate OTP
+    $otp_code = sprintf("%06d", mt_rand(1, 999999));
+    $otp_expires_at = date('Y-m-d H:i:s', strtotime('+15 minutes'));
+
     // Insert customer
     $sql = "INSERT INTO tbl_customer SET
         full_name='$full_name',
         email='$email',
         phone='$phone',
         password='$hashed_password',
-        address='$address'
+        address='$address',
+        is_verified=0,
+        otp_code='$otp_code',
+        otp_expires_at='$otp_expires_at'
     ";
 
     $res = mysqli_query($conn, $sql);
 
     if ($res == true) {
-        // Registration successful - auto login
-        $customer_id = mysqli_insert_id($conn);
-        $_SESSION['customer_id'] = $customer_id;
-        $_SESSION['customer_name'] = $full_name;
-        $_SESSION['customer_email'] = $email;
+        // Send OTP Email
+        require_once '../config/mailer.php';
+        $subject = "MedBD - Verify Your Email Address";
+        $body = "
+            <h3>Welcome to MedBD, $full_name!</h3>
+            <p>Your email verification code is: <b style='font-size:24px; color:#155e58;'>$otp_code</b></p>
+            <p>This code will expire in 15 minutes.</p>
+            <p>If you didn't create an account with us, you can safely ignore this email.</p>
+        ";
+        sendMail($email, $full_name, $subject, $body);
 
-        $_SESSION['register-success'] = "<div class='auth-message success'>Account created successfully! Welcome to MedBD.</div>";
-        header('location:' . SITEURL);
+        // Save email in session to verify page
+        $_SESSION['verify-email'] = $email;
+        $_SESSION['verify-msg'] = "<div class='auth-message success'>Registration successful! Please check your email for the verification code.</div>";
+        
+        header('location:' . SITEURL . 'customer/verify-otp.php');
         exit();
     } else {
         $_SESSION['register-error'] = "<div class='auth-message error'>Failed to create account. Please try again.</div>";

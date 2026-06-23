@@ -8,6 +8,7 @@
     <title>MEDbd | Premium Medical E-Commerce</title>
     <link rel="stylesheet" href="<?php echo SITEURL; ?>css/style.css?v=<?php echo time(); ?>">
     <link rel="stylesheet" href="<?php echo SITEURL; ?>css/customer.css?v=<?php echo time(); ?>">
+    <link rel="icon" type="image/png" href="<?php echo SITEURL; ?>images/favicon.png">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 <body>
