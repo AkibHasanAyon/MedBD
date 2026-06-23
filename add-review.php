@@ -13,6 +13,16 @@ if (isset($_POST['submit'])) {
     $rating = (int)$_POST['rating'];
     $review_text = mysqli_real_escape_string($conn, $_POST['review_text']);
     
+    // Check if customer has actually purchased this product and it is delivered
+    $purchase_sql = "SELECT id FROM tbl_order WHERE customer_id=$customer_id AND product_id=$product_id AND status='Delivered'";
+    $purchase_res = mysqli_query($conn, $purchase_sql);
+    
+    if (mysqli_num_rows($purchase_res) == 0) {
+        $_SESSION['review-msg'] = "<div class='error'>You can only review products that have been delivered to you.</div>";
+        header('location:' . $_SERVER['HTTP_REFERER']);
+        exit();
+    }
+    
     // Check if customer already reviewed this product
     $check_sql = "SELECT id FROM tbl_review WHERE product_id=$product_id AND customer_id=$customer_id";
     $check_res = mysqli_query($conn, $check_sql);

@@ -25,6 +25,10 @@
                         <td><input type="number" name="price" step="0.01" required></td>
                     </tr>
                     <tr>
+                        <td>Stock Quantity</td>
+                        <td><input type="number" name="stock_qty" value="50" min="0" required></td>
+                    </tr>
+                    <tr>
                         <td>Product Image</td>
                         <td><input type="file" name="image" accept="image/*"></td>
                     </tr>
@@ -84,6 +88,7 @@
             $title = mysqli_real_escape_string($conn, $_POST['title']);
             $description = mysqli_real_escape_string($conn, $_POST['description']);
             $price = mysqli_real_escape_string($conn, $_POST['price']);
+            $stock_qty = (int)$_POST['stock_qty'];
             $category = (int)$_POST['category'];
 
             //check wheter the radio button for featured and active are checked or not
@@ -160,6 +165,7 @@
                 title = '$title',
                 description = '$description',
                 price = $price,
+                stock_qty = $stock_qty,
                 image_name = '$image_name',
                 category_id = $category,
                 featured = '$featured',

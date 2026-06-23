@@ -45,18 +45,28 @@ if (isset($_POST['submit'])) {
     $total_amount = 0;
 
     if ($is_cart) {
-        $sql = "SELECT c.qty, p.id as product_id, p.title, p.price FROM tbl_cart c JOIN tbl_product p ON c.product_id = p.id WHERE c.customer_id=$customer_id";
+        $sql = "SELECT c.qty, p.id as product_id, p.title, p.price, p.stock_qty FROM tbl_cart c JOIN tbl_product p ON c.product_id = p.id WHERE c.customer_id=$customer_id";
         $res = mysqli_query($conn, $sql);
         while ($row = mysqli_fetch_assoc($res)) {
+            if ($row['qty'] > $row['stock_qty']) {
+                $_SESSION['order-error'] = "<div class='error'>Sorry, '" . htmlspecialchars($row['title']) . "' is out of stock or insufficient quantity available.</div>";
+                header('location:' . $_SERVER['HTTP_REFERER']);
+                exit();
+            }
             $items[] = $row;
             $total_amount += ($row['price'] * $row['qty']);
         }
     } else {
         $product_id = (int) $_POST['product_id'];
-        $sql = "SELECT id as product_id, title, price FROM tbl_product WHERE id=$product_id";
+        $sql = "SELECT id as product_id, title, price, stock_qty FROM tbl_product WHERE id=$product_id";
         $res = mysqli_query($conn, $sql);
         if ($row = mysqli_fetch_assoc($res)) {
             $row['qty'] = 1;
+            if ($row['qty'] > $row['stock_qty']) {
+                $_SESSION['order-error'] = "<div class='error'>Sorry, '" . htmlspecialchars($row['title']) . "' is currently out of stock.</div>";
+                header('location:' . $_SERVER['HTTP_REFERER']);
+                exit();
+            }
             $items[] = $row;
             $total_amount = $row['price'];
         }
@@ -96,6 +106,11 @@ if (isset($_POST['submit'])) {
 
         if (mysqli_query($conn, $insert_sql)) {
             $order_ids[] = mysqli_insert_id($conn);
+            
+            // Decrement stock
+            $new_stock = $item['stock_qty'] - $qty;
+            mysqli_query($conn, "UPDATE tbl_product SET stock_qty=$new_stock WHERE id=$product_id");
+            
         } else {
             error_log("Order Insert Failed: " . mysqli_error($conn));
         }

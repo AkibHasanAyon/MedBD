@@ -76,7 +76,54 @@
                     <span>Revenue Generated</span>
                 </div>
             </div>
+
+            <div class="stat-card" style="border-left: 4px solid #ef4444;">
+                <div class="stat-icon" style="background-color: #fee2e2; color: #ef4444;"><i class='bx bx-alarm-exclamation'></i></div>
+                <div class="stat-details">
+                    <?php 
+                        $sql_stock = "SELECT * FROM tbl_product WHERE stock_qty < 10";
+                        $res_stock = mysqli_query($conn, $sql_stock);
+                        $count_stock = mysqli_num_rows($res_stock);
+                    ?>
+                    <h1 style="color: #ef4444;"><?php echo $count_stock; ?></h1>
+                    <span>Low Stock Items</span>
+                </div>
+            </div>
         </div>
+
+        <?php if($count_stock > 0): ?>
+        <br>
+        <div class="table-container">
+            <h2 style="margin-bottom: 20px; color: #ef4444; display: flex; align-items: center; gap: 8px;">
+                <i class='bx bx-error-circle'></i> Low Stock Warning
+            </h2>
+            <table class="tbl-full">
+                <tr>
+                    <th>S.N.</th>
+                    <th>Product</th>
+                    <th>Remaining Stock</th>
+                    <th>Action</th>
+                </tr>
+                <?php
+                $sn = 1;
+                while($row_stock = mysqli_fetch_assoc($res_stock)) {
+                    $p_id = $row_stock['id'];
+                    $p_title = $row_stock['title'];
+                    $p_stock = $row_stock['stock_qty'];
+                ?>
+                <tr>
+                    <td><?php echo $sn++; ?>.</td>
+                    <td><?php echo $p_title; ?></td>
+                    <td style="color: #ef4444; font-weight: bold;"><?php echo $p_stock; ?></td>
+                    <td>
+                        <a href="<?php echo SITEURL; ?>admin/update-product.php?id=<?php echo $p_id; ?>" class="btn-secondary">Restock</a>
+                    </td>
+                </tr>
+                <?php } ?>
+            </table>
+        </div>
+        <?php endif; ?>
+
     </div>
 <!-- footer -->
 

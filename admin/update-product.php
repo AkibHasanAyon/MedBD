@@ -22,6 +22,7 @@ ob_start();
                 $title = $row2['title'];
                 $description = $row2['description'];
                 $price = $row2['price'];
+                $stock_qty = $row2['stock_qty'];
                 $current_image = $row2['image_name'];
                 $current_category =$row2['category_id'];
                 $featured = $row2['featured'];
@@ -63,6 +64,13 @@ ob_start();
                     <td>Price: </td>
                     <td>
                         <input type="number" name="price" value="<?php echo $price; ?>">
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Stock Quantity: </td>
+                    <td>
+                        <input type="number" name="stock_qty" value="<?php echo $stock_qty; ?>" min="0" required>
                     </td>
                 </tr>
 
@@ -174,6 +182,7 @@ ob_start();
                 $title = mysqli_real_escape_string($conn, $_POST['title']);
                 $description = mysqli_real_escape_string($conn, $_POST['description']);
                 $price = mysqli_real_escape_string($conn, $_POST['price']);
+                $stock_qty = (int)$_POST['stock_qty'];
                 $current_image = mysqli_real_escape_string($conn, $_POST['current_image']);
                 $category = (int)$_POST['category'];
             
@@ -253,6 +262,7 @@ ob_start();
                 title = '$title',
                 description = '$description',
                 price = $price,
+                stock_qty = $stock_qty,
                 image_name = '$image_name',
                 category_id = '$category',
                 featured = '$featured',
