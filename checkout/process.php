@@ -136,7 +136,7 @@ if (isset($_POST['submit'])) {
     } else {
         // Cash on delivery
         // Send email
-        include('checkout/send-email.php');
+        include('send-email.php');
         sendOrderConfirmationEmail($customer_email, $customer_name, $order_ids);
 
         $_SESSION['success'] = "Order Placed Successfully! Your order will be delivered soon.";

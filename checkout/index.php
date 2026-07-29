@@ -90,7 +90,7 @@ $total_amount_cents = round($total_amount * 100);
             <div style="background: #fff; padding: 40px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.04);">
                 <h3 style="color: #222; margin-bottom: 25px; font-size: 22px; font-weight: 700; border-bottom: 2px solid #f0f0f0; padding-bottom: 15px;">Delivery Details</h3>
                 
-                <form action="checkout/process.php" method="POST" enctype="multipart/form-data" id="checkout-form">
+                <form action="<?php echo SITEURL; ?>checkout/process.php" method="POST" enctype="multipart/form-data" id="checkout-form">
                     
                     <div class="form-group">
                         <label class="form-label">Full Name</label>

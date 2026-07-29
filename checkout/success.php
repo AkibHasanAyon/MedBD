@@ -22,7 +22,7 @@ mysqli_query($conn, $sql);
 $email_sql = "SELECT customer_email, customer_name FROM tbl_order WHERE id=" . $order_ids[0] . " LIMIT 1";
 $email_res = mysqli_query($conn, $email_sql);
 if ($email_row = mysqli_fetch_assoc($email_res)) {
-    include('checkout/send-email.php');
+    include('send-email.php');
     sendOrderConfirmationEmail($email_row['customer_email'], $email_row['customer_name'], $order_ids);
 }
 

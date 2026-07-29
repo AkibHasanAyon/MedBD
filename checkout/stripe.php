@@ -11,7 +11,7 @@ $amount_cents = (int)$_GET['amount'];
 
 // Simple Stripe API integration using cURL (no external libraries needed)
 $stripe_secret_key = STRIPE_SECRET_KEY;
-$success_url = SITEURL . 'stripe-success.php?session_id={CHECKOUT_SESSION_ID}&order_ids=' . urlencode($order_ids_str);
+$success_url = SITEURL . 'checkout/success.php?session_id={CHECKOUT_SESSION_ID}&order_ids=' . urlencode($order_ids_str);
 $cancel_url = SITEURL . 'customer/my-orders.php?payment=failed';
 
 $ch = curl_init('https://api.stripe.com/v1/checkout/sessions');
