@@ -16,12 +16,10 @@
             <table class="tbl-full" style="font-size: 14px;">
                 <thead>
                     <tr>
-                        <th width="3%">S.N.</th>
-                        <th width="15%">Product</th>
-                        <th width="5%">Price</th>
-                        <th width="5%">Qty</th>
+                        <th width="4%">S.N.</th>
+                        <th width="22%">Products Ordered</th>
                         <th width="8%">Total</th>
-                        <th width="10%">Order Date</th>
+                        <th width="12%">Order Date</th>
                         <th width="8%">Status</th>
                         <th width="10%">Payment</th>
                         <th width="8%">Prescription</th>
@@ -32,33 +30,65 @@
                 </thead>
                 <tbody>
                 <?php
-                   $sql="SELECT * FROM tbl_order ORDER BY id DESC";
+                   $sql="SELECT * FROM tbl_order ORDER BY order_date DESC, id DESC";
                    $res=mysqli_query($conn, $sql);
                    $count=mysqli_num_rows($res);
                    $sn= 1;
                  
                    if($count>0) {
-                     while($row=mysqli_fetch_assoc($res)) {
-                       $id=$row['id'];
-                       $product=$row['product'];
-                       $price=$row['price'];
-                       $qty=$row['qty'];
-                       $total=$row['total'];
-                       $order_date=$row['order_date'];
-                       $status=$row['status'];
-                       $payment_method = $row['payment_method'];
-                       $payment_status = $row['payment_status'];
-                       $prescription_image = $row['prescription_image'];
-                       $customer_name=$row['customer_name'];
-                       $customer_contact=$row['customer_contact'];
-                       
+                       // Group products from the same cart checkout (shared order_date and customer)
+                       $grouped_orders = [];
+                       while($row = mysqli_fetch_assoc($res)) {
+                           $group_key = $row['order_date'] . '_' . $row['customer_email'];
+                           if (!isset($grouped_orders[$group_key])) {
+                               $grouped_orders[$group_key] = [
+                                   'main_id' => $row['id'],
+                                   'order_date' => $row['order_date'],
+                                   'status' => $row['status'],
+                                   'payment_method' => $row['payment_method'],
+                                   'payment_status' => $row['payment_status'],
+                                   'prescription_image' => $row['prescription_image'],
+                                   'customer_name' => $row['customer_name'],
+                                   'customer_contact' => $row['customer_contact'],
+                                   'total' => 0,
+                                   'items' => []
+                               ];
+                           }
+                           if (!empty($row['prescription_image']) && empty($grouped_orders[$group_key]['prescription_image'])) {
+                               $grouped_orders[$group_key]['prescription_image'] = $row['prescription_image'];
+                           }
+                           $grouped_orders[$group_key]['total'] += $row['total'];
+                           $grouped_orders[$group_key]['items'][] = [
+                               'id' => $row['id'],
+                               'product' => $row['product'],
+                               'qty' => $row['qty'],
+                               'price' => $row['price'],
+                               'total' => $row['total']
+                           ];
+                       }
+
+                       foreach($grouped_orders as $group) {
+                           $id = $group['main_id'];
+                           $total = $group['total'];
+                           $order_date = $group['order_date'];
+                           $status = $group['status'];
+                           $payment_method = $group['payment_method'];
+                           $payment_status = $group['payment_status'];
+                           $prescription_image = $group['prescription_image'];
+                           $customer_name = $group['customer_name'];
+                           $customer_contact = $group['customer_contact'];
                        ?>
                         <tr>
                             <td><?php echo $sn++; ?>. </td>
-                            <td style="font-weight: 500;"><?php echo $product; ?></td>
-                            <td>৳<?php echo $price; ?></td>
-                            <td><?php echo $qty; ?></td>
-                            <td style="font-weight: 600; color: var(--primary);">৳<?php echo $total; ?></td>
+                            <td>
+                                <?php foreach($group['items'] as $item): ?>
+                                    <div style="padding: 4px 0; border-bottom: 1px solid #f0f0f0;">
+                                        <strong style="color: #2b2d42;"><?php echo htmlspecialchars($item['product']); ?></strong> 
+                                        <span style="color: #666; font-size: 13px;">(x<?php echo $item['qty']; ?> — ৳<?php echo $item['total']; ?>)</span>
+                                    </div>
+                                <?php endforeach; ?>
+                            </td>
+                            <td style="font-weight: 600; color: var(--primary); font-size: 15px;">৳<?php echo $total; ?></td>
                             <td style="color: #666; font-size: 13px;"><?php echo date("M j, Y g:i A", strtotime($order_date)); ?></td>
 
                             <td>
@@ -92,9 +122,9 @@
                             </td>
 
                             <td style="font-size: 13px;">
-                                <strong><?php echo $customer_name; ?></strong>
+                                <strong><?php echo htmlspecialchars($customer_name); ?></strong>
                             </td>
-                            <td style="font-size: 13px; color:#555;"><?php echo $customer_contact; ?></td>
+                            <td style="font-size: 13px; color:#555;"><?php echo htmlspecialchars($customer_contact); ?></td>
                             <td>
                                 <a href="<?php echo SITEURL;?>admin/update-order.php?id=<?php echo $id; ?>" class="btn-secondary" style="font-size: 12px; padding: 4px 8px;"><i class='bx bx-edit'></i> Edit</a>
                             </td>
@@ -102,7 +132,7 @@
                     <?php
                      }
                    } else {
-                     echo "<tr><td colspan='12' style='text-align:center; padding:30px; color:#666;'>Orders Not Available</td></tr>";
+                     echo "<tr><td colspan='10' style='text-align:center; padding:30px; color:#666;'>Orders Not Available</td></tr>";
                    }
                ?>
                 </tbody>

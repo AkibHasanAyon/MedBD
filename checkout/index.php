@@ -132,10 +132,17 @@ $total_amount_cents = round($total_amount * 100);
                         <i class='bx bx-money'></i>
                     </label>
                     
-                    <label class="payment-option" style="margin-bottom: 35px;">
-                        <input type="radio" name="payment_method" value="Stripe">
-                        <span class="payment-text">Pay Online with Card (Stripe)</span>
-                        <i class='bx bxl-stripe' style="color: #6772e5;"></i>
+                    <label class="payment-option" style="margin-bottom: 35px; <?php echo ($total_amount < 60) ? 'opacity: 0.55; cursor: not-allowed; background-color: #f9f9f9;' : ''; ?>">
+                        <input type="radio" name="payment_method" value="Stripe" <?php echo ($total_amount < 60) ? 'disabled' : ''; ?>>
+                        <div>
+                            <span class="payment-text">Pay Online with Card (Stripe)</span>
+                            <?php if ($total_amount < 60): ?>
+                                <span style="display: block; font-size: 13px; color: #dc2626; margin-top: 4px; font-weight: 500;">
+                                    <i class='bx bx-error-circle' style="font-size: 14px; margin: 0; color: #dc2626; vertical-align: -2px;"></i> Minimum amount for online card payment is ৳60 (Current: ৳<?php echo $total_amount; ?>)
+                                </span>
+                            <?php endif; ?>
+                        </div>
+                        <i class='bx bxl-stripe' style="color: #6772e5; margin-left: auto;"></i>
                     </label>
 
                     <!-- Hidden fields -->

@@ -65,7 +65,7 @@ $customer_id = (int) $_SESSION['customer_id'];
                     </td>
                     <td style="padding: 15px; color: #555;">৳<?php echo $price; ?></td>
                     <td style="padding: 15px;">
-                        <form action="<?php echo SITEURL; ?>update-cart.php" method="POST" style="display: flex; gap: 10px;">
+                        <form action="<?php echo SITEURL; ?>cart/update.php" method="POST" style="display: flex; gap: 10px;">
                             <input type="hidden" name="cart_id" value="<?php echo $cart_id; ?>">
                             <input type="number" name="qty" value="<?php echo $qty; ?>" min="1"
                                 style="width: 60px; padding: 5px; border: 1px solid #ccc; border-radius: 4px;">

@@ -95,7 +95,7 @@ if ($rev_count > 0) {
         <div style="background: #f9f9f9; padding: 20px; border-radius: 8px; margin-bottom: 30px;">
             <h4 style="margin-bottom: 15px;">Write a Review</h4>
             <?php if (isset($_SESSION['customer_id'])): ?>
-                <form action="<?php echo SITEURL; ?>add-review.php" method="POST">
+                <form action="<?php echo SITEURL; ?>catalog/add-review.php" method="POST">
                     <input type="hidden" name="product_id" value="<?php echo $product_id; ?>">
                     
                     <div style="margin-bottom: 15px;">

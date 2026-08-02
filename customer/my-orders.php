@@ -22,27 +22,55 @@ $customer_id = (int)$_SESSION['customer_id'];
         $order_count = mysqli_num_rows($order_res);
 
         if ($order_count > 0) {
+            // Group products ordered in the same cart checkout (identical order_date)
+            $grouped_orders = [];
+            while ($order = mysqli_fetch_assoc($order_res)) {
+                $group_key = $order['order_date']; 
+                if (!isset($grouped_orders[$group_key])) {
+                    $grouped_orders[$group_key] = [
+                        'main_id' => $order['id'],
+                        'date' => $order['order_date'],
+                        'status' => $order['status'],
+                        'payment_method' => $order['payment_method'],
+                        'payment_status' => $order['payment_status'],
+                        'total' => 0,
+                        'items' => []
+                    ];
+                }
+                $grouped_orders[$group_key]['total'] += $order['total'];
+                $grouped_orders[$group_key]['items'][] = [
+                    'product' => $order['product'],
+                    'qty' => $order['qty'],
+                    'price' => $order['price'],
+                    'total' => $order['total']
+                ];
+            }
         ?>
             <table class="order-history-table">
                 <tr>
                     <th>Order #</th>
-                    <th>Product</th>
-                    <th>Qty</th>
+                    <th>Products Ordered</th>
                     <th>Total</th>
                     <th>Date</th>
                     <th>Status</th>
                     <th>Payment</th>
                 </tr>
-                <?php while ($order = mysqli_fetch_assoc($order_res)): ?>
+                <?php foreach ($grouped_orders as $group): ?>
                     <tr>
-                        <td>#<?php echo $order['id']; ?></td>
-                        <td><?php echo htmlspecialchars($order['product']); ?></td>
-                        <td><?php echo $order['qty']; ?></td>
-                        <td>৳<?php echo $order['total']; ?></td>
-                        <td><?php echo date('d M Y, h:i A', strtotime($order['order_date'])); ?></td>
+                        <td>#<?php echo $group['main_id']; ?></td>
+                        <td>
+                            <?php foreach ($group['items'] as $item): ?>
+                                <div style="padding: 4px 0; border-bottom: 1px solid #f0f0f0;">
+                                    <strong style="color: #333;"><?php echo htmlspecialchars($item['product']); ?></strong> 
+                                    <span style="color: #666; font-size: 13px;">(x<?php echo $item['qty']; ?> — ৳<?php echo $item['total']; ?>)</span>
+                                </div>
+                            <?php endforeach; ?>
+                        </td>
+                        <td><strong style="color: #155e58; font-size: 16px;">৳<?php echo $group['total']; ?></strong></td>
+                        <td><?php echo date('d M Y, h:i A', strtotime($group['date'])); ?></td>
                         <td>
                             <?php
-                            $status = $order['status'];
+                            $status = $group['status'];
                             $status_class = 'status-ordered';
                             if ($status == 'On Delivery') $status_class = 'status-on-delivery';
                             elseif ($status == 'Delivered') $status_class = 'status-delivered';
@@ -52,8 +80,8 @@ $customer_id = (int)$_SESSION['customer_id'];
                         </td>
                         <td>
                             <?php 
-                                echo $order['payment_method']; 
-                                if ($order['payment_status'] == 'Paid') {
+                                echo $group['payment_method']; 
+                                if ($group['payment_status'] == 'Paid') {
                                     echo " <span style='color:green;font-size:12px;'>(Paid)</span>";
                                 } else {
                                     echo " <span style='color:orange;font-size:12px;'>(Pending)</span>";
@@ -61,7 +89,7 @@ $customer_id = (int)$_SESSION['customer_id'];
                             ?>
                         </td>
                     </tr>
-                <?php endwhile; ?>
+                <?php endforeach; ?>
             </table>
         <?php
         } else {

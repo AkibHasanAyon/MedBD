@@ -9,165 +9,145 @@
            //Check whether id is set or not
            if(isset($_GET['id']))
            {
-               //Get the order Details
                $id=(int)$_GET['id'];
-               //Get all the id according to id
-
-               //Sql Query to gety the order details
                $sql="SELECT * FROM tbl_order WHERE id=$id";
-               //Execute the query
                $res=mysqli_query($conn, $sql);
-               //Count rows
                $count=mysqli_num_rows($res);
                if($count==1)
                {
-                   //detail Available
                    $row=mysqli_fetch_assoc($res);
-                   $product=$row['product'];
-                   $price=$row['price'];
-                   $qty=$row['qty'];
                    $status=$row['status'];
                    $customer_name=$row['customer_name'];
                    $customer_contact=$row['customer_contact'];
                    $customer_email=$row['customer_email'];
                    $customer_address=$row['customer_address'];
-                      
-
+                   $order_date=$row['order_date'];
+                   
+                   // Fetch all products included in this exact checkout group
+                   $items_sql="SELECT * FROM tbl_order WHERE order_date='$order_date' AND customer_email='$customer_email'";
+                   $items_res=mysqli_query($conn, $items_sql);
+                   $order_items=[];
+                   $total_group_price=0;
+                   while($item = mysqli_fetch_assoc($items_res)) {
+                       $order_items[] = $item;
+                       $total_group_price += $item['total'];
+                   }
                }
                else
                {
-                   //Redirect To manage Order page
                    header('location:'.SITEURL.'admin/manage-order.php');
+                   exit();
                }
-
            }
            else
            {
-               //Redirect to manage order  page
                header('location:'.SITEURL.'admin/manage-order.php');
+               exit();
            }
-
-
         ?>
 
         <form action="" method="POST">
-            <table class="tbl_30">
+            <table class="tbl_30" style="width: 50%;">
                 <tr>
-                    <td>Product Name</td>
-                    <td><b><?php echo $product; ?></b></td>
-                </tr>
-                <tr>
-                    <td>Price</td>
+                    <td style="vertical-align: top; padding-top: 10px;">Ordered Products:</td>
                     <td>
-                        <b>৳<?php echo $price; ?></b>
+                        <?php foreach($order_items as $itm): ?>
+                            <div style="padding: 6px 0; border-bottom: 1px solid #eee;">
+                                <strong style="color: #333;"><?php echo htmlspecialchars($itm['product']); ?></strong> 
+                                <span style="color: #666; font-size: 13px;">(x<?php echo $itm['qty']; ?> — ৳<?php echo $itm['total']; ?>)</span>
+                            </div>
+                        <?php endforeach; ?>
                     </td>
                 </tr>
                 <tr>
-                    <td>Qty</td>
+                    <td>Total Order Amount:</td>
                     <td>
-                        <input type="number" name="qty" value="<?php echo $qty; ?>">
+                        <b style="color: var(--primary); font-size: 16px;">৳<?php echo $total_group_price; ?></b>
                     </td>
                 </tr>
                 <tr>
-                    <td>Status</td>
+                    <td>Status:</td>
                     <td>
-                        <select name="status">
-                            <option <?php if($status=="Ordered"){echo "selected";} ?> value="Ordered">Ordered</option>
-                            <option <?php if($status=="On Delivery"){echo "selected";} ?>value="On Delivery">On Delivery
-                            </option>
-                            <option <?php if($status=="Delivered"){echo "selected";} ?>value="Delivered">Delivered
-                            </option>
-                            <option <?php if($status=="Cancelled"){echo "selected";} ?>value="Cancelled">Cancelled
-                            </option>
+                        <select name="status" style="padding: 6px 12px; border-radius: 4px; border: 1px solid #ccc; width: 100%;">
+                            <option <?php if(trim($status)=="Ordered"){echo "selected ";} ?> value="Ordered">Ordered</option>
+                            <option <?php if(trim($status)=="On Delivery"){echo "selected ";} ?> value="On Delivery">On Delivery</option>
+                            <option <?php if(trim($status)=="Delivered"){echo "selected ";} ?> value="Delivered">Delivered</option>
+                            <option <?php if(trim($status)=="Cancelled"){echo "selected ";} ?> value="Cancelled">Cancelled</option>
                         </select>
                     </td>
                 </tr>
                 <tr>
-                    <td>Customer name:</td>
+                    <td>Customer Name:</td>
                     <td>
-                        <input type="text" name="customer_name" value="<?php echo $customer_name; ?>">
+                        <input type="text" name="customer_name" value="<?php echo htmlspecialchars($customer_name); ?>" style="width: 100%; padding: 6px;">
                     </td>
                 </tr>
                 <tr>
                     <td>Customer Contact:</td>
                     <td>
-                        <input type="text" name="customer_contact" value="<?php echo $customer_contact; ?>">
+                        <input type="text" name="customer_contact" value="<?php echo htmlspecialchars($customer_contact); ?>" style="width: 100%; padding: 6px;">
                     </td>
                 </tr>
                 <tr>
                     <td>Customer Email:</td>
                     <td>
-                        <input type="text" name="customer_email" value="<?php echo $customer_email; ?>">
+                        <input type="text" name="customer_email" value="<?php echo htmlspecialchars($customer_email); ?>" style="width: 100%; padding: 6px;">
                     </td>
                 </tr>
                 <tr>
-                    <td>Customer Address:</td>
+                    <td style="vertical-align: top; padding-top: 10px;">Customer Address:</td>
                     <td>
-                        <textarea name="customer_address" cols="30" rows="5"><?php echo $customer_address; ?></textarea>
+                        <textarea name="customer_address" cols="30" rows="4" style="width: 100%; padding: 6px;"><?php echo htmlspecialchars($customer_address); ?></textarea>
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="2">
+                    <td colspan="2" style="padding-top: 20px;">
                         <input type="hidden" name="id" value="<?php echo $id; ?>">
-                        <input type="hidden" name="price" value="<?php echo $price; ?>">
-                        <input type="submit" name="submit" value="Update Order" class="btn-secondary">
+                        <input type="hidden" name="order_date" value="<?php echo $order_date; ?>">
+                        <input type="hidden" name="orig_email" value="<?php echo $customer_email; ?>">
+                        <input type="submit" name="submit" value="Update Order Status & Info" class="btn-secondary" style="padding: 10px 20px; cursor: pointer;">
                     </td>
                 </tr>
-
             </table>
-
         </form>
         <?php
            
-         //check whether update button is clicked or not
          if(isset($_POST['submit']))
          {
-             //echo "Clicked"
-             //Get All the Values from form
-               $id=(int)$_POST['id'];
-               $price=mysqli_real_escape_string($conn, $_POST['price']);
-               $qty=(int)$_POST['qty'];
-               $total=$price*$qty;
-               $status=mysqli_real_escape_string($conn, $_POST['status']);
-               $customer_name=mysqli_real_escape_string($conn, $_POST['customer_name']);
-               $customer_contact=mysqli_real_escape_string($conn, $_POST['customer_contact']);
-               $customer_email=mysqli_real_escape_string($conn, $_POST['customer_email']);
-               $customer_address=mysqli_real_escape_string($conn, $_POST['customer_address']);
+               $id = (int)$_POST['id'];
+               $order_date = mysqli_real_escape_string($conn, $_POST['order_date']);
+               $orig_email = mysqli_real_escape_string($conn, $_POST['orig_email']);
+               $status = mysqli_real_escape_string($conn, $_POST['status']);
+               $customer_name = mysqli_real_escape_string($conn, $_POST['customer_name']);
+               $customer_contact = mysqli_real_escape_string($conn, $_POST['customer_contact']);
+               $customer_email = mysqli_real_escape_string($conn, $_POST['customer_email']);
+               $customer_address = mysqli_real_escape_string($conn, $_POST['customer_address']);
 
-             //update the values
+             // Update status and customer info for all products in this checkout group
              $sql2="UPDATE tbl_order SET 
-                   qty=$qty,
-                   total=$total,
                    status='$status',
                    customer_name='$customer_name',
                    customer_contact='$customer_contact',
                    customer_email='$customer_email',
                    customer_address='$customer_address'
-                   WHERE id=$id
+                   WHERE order_date='$order_date' AND customer_email='$orig_email'
              ";
 
-             //Execute the Query
-                $res2 = mysqli_query($conn, $sql2);
+             $res2 = mysqli_query($conn, $sql2);
 
-                //CHeck whether update or not
-                //And REdirect to Manage Order with Message
-                if($res2==true)
-                {
-                    //Updated
-                    $_SESSION['update'] = "<div class='success'>Order Updated Successfully.</div>";
-                    header('location:'.SITEURL.'admin/manage-order.php');
-                }
-                else
-                {
-                    //Failed to Update
-                    $_SESSION['update'] = "<div class='error'>Failed to Update Order.</div>";
-                    header('location:'.SITEURL.'admin/manage-order.php');
-                }
-
+             if($res2 == true)
+             {
+                 $_SESSION['update'] = "<div class='success'>Order Updated Successfully.</div>";
+                 header('location:'.SITEURL.'admin/manage-order.php');
+                 exit();
+             }
+             else
+             {
+                 $_SESSION['update'] = "<div class='error'>Failed to Update Order.</div>";
+                 header('location:'.SITEURL.'admin/manage-order.php');
+                 exit();
+             }
          }
-         
-         
-         
          ?>
 
 

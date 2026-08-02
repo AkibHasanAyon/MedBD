@@ -40,9 +40,8 @@ if (isset($_POST['submit'])) {
         
         // Generate OTP
         $otp_code = sprintf("%06d", mt_rand(1, 999999));
-        $otp_expires_at = date('Y-m-d H:i:s', strtotime('+15 minutes'));
         
-        $update_sql = "UPDATE tbl_customer SET otp_code='$otp_code', otp_expires_at='$otp_expires_at' WHERE email='$email'";
+        $update_sql = "UPDATE tbl_customer SET otp_code='$otp_code', otp_expires_at=DATE_ADD(NOW(), INTERVAL 15 MINUTE) WHERE email='$email'";
         mysqli_query($conn, $update_sql);
         
         // Send Email

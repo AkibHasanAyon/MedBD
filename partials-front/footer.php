@@ -55,6 +55,77 @@
     </div>
 </footer>
 
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const searchBoxes = document.querySelectorAll(".search-box");
+    
+    searchBoxes.forEach(function(box) {
+        const input = box.querySelector("input[type='search']");
+        if (!input) return;
+
+        // Automatically append suggestions container inside search box
+        const suggestionDiv = document.createElement("div");
+        suggestionDiv.className = "search-suggestions";
+        box.appendChild(suggestionDiv);
+
+        let debounceTimer;
+
+        input.addEventListener("input", function() {
+            clearTimeout(debounceTimer);
+            const query = this.value.trim();
+
+            if (query.length < 1) {
+                suggestionDiv.style.display = "none";
+                suggestionDiv.innerHTML = "";
+                return;
+            }
+
+            debounceTimer = setTimeout(function() {
+                fetch("<?php echo SITEURL; ?>catalog/suggest-product.php?q=" + encodeURIComponent(query))
+                    .then(response => response.json())
+                    .then(data => {
+                        suggestionDiv.innerHTML = "";
+                        if (data.length === 0) {
+                            suggestionDiv.innerHTML = '<div class="no-suggestion">No matching products found</div>';
+                        } else {
+                            data.forEach(function(item) {
+                                const link = document.createElement("a");
+                                link.href = item.url;
+                                link.className = "suggestion-item";
+                                link.innerHTML = `
+                                    <img src="${item.image}" alt="${item.title}" class="suggestion-img">
+                                    <div class="suggestion-details">
+                                        <span class="suggestion-title">${item.title}</span>
+                                        <span class="suggestion-price">৳${item.price}</span>
+                                    </div>
+                                `;
+                                suggestionDiv.appendChild(link);
+                            });
+                        }
+                        suggestionDiv.style.display = "block";
+                    })
+                    .catch(err => {
+                        console.error("Error fetching search suggestions:", err);
+                    });
+            }, 200);
+        });
+
+        // Restore suggestions dropdown if user re-focuses on input field
+        input.addEventListener("focus", function() {
+            if (this.value.trim().length >= 1 && suggestionDiv.innerHTML !== "") {
+                suggestionDiv.style.display = "block";
+            }
+        });
+
+        // Hide suggestions when clicking outside the search box
+        document.addEventListener("click", function(e) {
+            if (!box.contains(e.target)) {
+                suggestionDiv.style.display = "none";
+            }
+        });
+    });
+});
+</script>
 </body>
 
 </html>

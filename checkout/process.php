@@ -77,6 +77,12 @@ if (isset($_POST['submit'])) {
         exit();
     }
 
+    if ($payment_method == "Stripe" && $total_amount < 60) {
+        $_SESSION['order-error'] = "<div class='error text-center' style='background:#fef2f2; border:1px solid #f87171; color:#991b1b; padding:12px; border-radius:8px; margin-bottom:15px;'>Minimum order amount for Stripe card payments is ৳60. Please add more items or select Cash on Delivery.</div>";
+        header('location:' . $_SERVER['HTTP_REFERER']);
+        exit();
+    }
+
     // Insert orders
     $order_ids = [];
     foreach ($items as $item) {

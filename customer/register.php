@@ -102,7 +102,6 @@ if (isset($_POST['submit'])) {
 
     // Generate OTP
     $otp_code = sprintf("%06d", mt_rand(1, 999999));
-    $otp_expires_at = date('Y-m-d H:i:s', strtotime('+15 minutes'));
 
     // Insert customer
     $sql = "INSERT INTO tbl_customer SET
@@ -113,7 +112,7 @@ if (isset($_POST['submit'])) {
         address='$address',
         is_verified=0,
         otp_code='$otp_code',
-        otp_expires_at='$otp_expires_at'
+        otp_expires_at=DATE_ADD(NOW(), INTERVAL 15 MINUTE)
     ";
 
     $res = mysqli_query($conn, $sql);

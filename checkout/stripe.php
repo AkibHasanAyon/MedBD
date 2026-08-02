@@ -54,10 +54,30 @@ if ($http_code == 200 && isset($session['id'])) {
     header("Location: " . $session['url']);
     exit();
 } else {
-    // Error creating checkout session
+    // Error creating checkout session - Clean up pending order from DB so user isn't stuck with unpayable orders!
+    $ids = explode(',', $order_ids_str);
+    $clean_ids = [];
+    foreach ($ids as $id) {
+        $clean_id = (int) trim($id);
+        if ($clean_id > 0) {
+            $clean_ids[] = $clean_id;
+        }
+    }
+    if (!empty($clean_ids)) {
+        $id_list = implode(',', $clean_ids);
+        // Revert stock quantity and remove orders
+        $res_ord = mysqli_query($conn, "SELECT product_id, qty FROM tbl_order WHERE id IN ($id_list)");
+        while ($o = mysqli_fetch_assoc($res_ord)) {
+            $pid = (int) $o['product_id'];
+            $pqty = (int) $o['qty'];
+            mysqli_query($conn, "UPDATE tbl_product SET stock_qty = stock_qty + $pqty WHERE id = $pid");
+        }
+        mysqli_query($conn, "DELETE FROM tbl_order WHERE id IN ($id_list)");
+    }
+
     $error_msg = isset($session['error']['message']) ? $session['error']['message'] : 'Unknown error';
-    $_SESSION['order-success'] = "<div class='error text-center'><h3>Payment Setup Failed</h3><p>Could not connect to payment gateway: " . htmlspecialchars($error_msg) . "</p></div>";
-    header('location:' . SITEURL . 'customer/my-orders.php');
+    $_SESSION['order-error'] = "<div class='error text-center' style='background:#fef2f2; border:1px solid #f87171; color:#991b1b; padding:12px; border-radius:8px; margin-bottom:15px;'><h3>Payment Setup Failed</h3><p>Could not initialize online card payment: " . htmlspecialchars($error_msg) . "</p></div>";
+    header('location:' . SITEURL . 'cart/');
     exit();
 }
 ?>

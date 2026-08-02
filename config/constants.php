@@ -1,4 +1,10 @@
 <?php 
+// Enable Output Buffering to prevent "headers already sent" errors during redirection
+ob_start();
+
+// Set Default Timezone
+date_default_timezone_set('Asia/Dhaka');
+
 //Start Session
 
 session_start();
