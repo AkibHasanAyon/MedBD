@@ -1,131 +1,84 @@
 <?php include('../partials-front/menu.php'); ?>
 
 <style>
-/* contact specific alignment fixes from style2.css */
-.Contact-header{
-    background: #155e58;
-    width: 100%;
-    height: 40vh;
-    background-size: cover;
-    display: flex;
-    justify-content: center;
-    text-align: center;
-    flex-direction: column;
-    padding: 14px;
-}
+    /* contact specific alignment fixes from style2.css */
+    .Contact-header {
+        background: #155e58;
+        width: 100%;
+        height: 40vh;
+        background-size: cover;
+        display: flex;
+        justify-content: center;
+        text-align: center;
+        flex-direction: column;
+        padding: 14px;
+    }
 
-.Contact-header h2 {
-    color: white;
-}
+    .Contact-header h2 {
+        color: white;
+    }
 
-.Contact-header p {
-    color: white;
-}
+    .Contact-header p {
+        color: white;
+    }
 
-#contact-datails{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 40px 80px;
-}
+    #contact-datails {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 40px 80px;
+    }
 
-#contact-datails .details{
-    width: 40%;
-}
+    #contact-datails .details {
+        width: 40%;
+    }
 
-#contact-datails .details span,
-#form-details form span{
-    font-size: 12px;
-}
+    #contact-datails .details span,
+    #form-details form span {
+        font-size: 12px;
+    }
 
-#contact-datails .details h2,#form-details form h2{
-      font-size: 26px;
-      line-height: 35px;
-      padding: 20px 0;
-}
+    #contact-datails .details h2,
+    #form-details form h2 {
+        font-size: 26px;
+        line-height: 35px;
+        padding: 20px 0;
+    }
 
-#contact-datails .details h3{
-    font-size: 20px;
-    padding-bottom: 15px;
-}
+    #contact-datails .details h3 {
+        font-size: 20px;
+        padding-bottom: 15px;
+    }
 
-#contact-datails .details li{
-  list-style: none;
-  display: flex;
-  padding: 10px 0;
-}
+    #contact-datails .details li {
+        list-style: none;
+        display: flex;
+        padding: 10px 0;
+    }
 
-#contact-datails .details li i{
-    font-size: 14px;
-    padding-right: 22px ;
-}
+    #contact-datails .details li i {
+        font-size: 14px;
+        padding-right: 22px;
+    }
 
-#contact-datails .details li p{
-    margin: 0;
-    font-size: 14px;
-}
+    #contact-datails .details li p {
+        margin: 0;
+        font-size: 14px;
+    }
 
-#contact-datails .map{
-    width: 55%;
-    height: 400px;
-}
+    #contact-datails .map {
+        width: 55%;
+        height: 400px;
+    }
 
-#contact-datails .map iframe{
-    width: 100%;
-    height: 100%;
-}
-#dhead{
-    margin: 30px;
-    padding: 80px;
-    border: 1px solid #ddd;
-    border-radius: 12px;
-}
-.pad{
-    padding-bottom: 40px;
-    font-weight: 700;
-}
+    #contact-datails .map iframe {
+        width: 100%;
+        height: 100%;
+    }
 
-#developer-details{
-    display: flex;
-    justify-content: center;
-}
-#developer-details .people{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    align-content: center;
-    flex-wrap: wrap;
-    gap: 50px;
-}
-#developer-details .people div{
-   display: flex;
-   flex-direction: column;
-   align-items: center;
-   text-align: center;
-}
-#developer-details .people div img{
-    width: 150px;
-    height: 150px;
-    object-fit: cover;
-    margin-bottom: 15px;
-    border-radius: 50%;
-    border: 3px solid #155e58;
-}
-
-#developer-details .people div p{
-    margin: 0;
-    font-size: 13px;
-    line-height: 25px;
-}
-#developer-details .people div p span{
-    display: block;
-    font-size: 16px;
-    font-weight: 600;
-    color: black;
-}
-.MID{
-    text-align: center;
-}
+    .MID {
+        text-align: center;
+    }
 </style>
 
 <section id="Contact-header" class="Contact-header">
@@ -165,49 +118,8 @@
             width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
             referrerpolicy="no-referrer-when-downgrade"></iframe>
     </div>
-
-
-
 </section>
-<section id="dhead">
-    <h3 class="MID pad">Developers</h3>
-     <h4 class="MID pad"/h3>
-    
-    <div id="developer-details">
-   
-   
-  
-        <div class= "people">
-        
-         
-        
-        
-            <div>
-                <img src="<?php echo SITEURL; ?>images/people/nasim.png?v=<?php echo time(); ?>" alt="">
-                <p><span>Nasim Ahamed</span> Student
-                    <br>Phone:+8801762491926
-                    <br>Email:nasimahamed84@gmail.com
-                </p>
-            </div>
-            <div>
-                <img src="<?php echo SITEURL; ?>images/people/akib.png?v=<?php echo time(); ?>" alt="">
-                <p><span>Akib Hasan</span> Student
-                    <br>Phone:+8801746585025
-                    <br>Email:akib.hasan1@northsouth.edu
-                </p>
-            </div>
-            <div>
-                <img src="<?php echo SITEURL; ?>images/people/naima.png?v=<?php echo time(); ?>" alt="">
-                <p><span>Naima Homaira Khan</span> Student
-                    <br>Phone:+8801900000000
-                    <br>Email:naima.khan@northsouth.edu
-                </p>
-            </div>
-            
-        </div>
-    </div>
 
-</section>
 
 
 <?php include('../partials-front/footer.php'); ?>

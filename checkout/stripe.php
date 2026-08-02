@@ -17,7 +17,7 @@ $cancel_url = SITEURL . 'customer/my-orders.php?payment=failed';
 $ch = curl_init('https://api.stripe.com/v1/checkout/sessions');
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_USERPWD, $stripe_secret_key . ':');
-curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query([
+$post_fields = [
     'payment_method_types' => ['card'],
     'line_items' => [
         [
@@ -34,7 +34,13 @@ curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query([
     'mode' => 'payment',
     'success_url' => $success_url,
     'cancel_url' => $cancel_url,
-]));
+];
+
+if (isset($_SESSION['customer_email'])) {
+    $post_fields['customer_email'] = $_SESSION['customer_email'];
+}
+
+curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($post_fields));
 
 $response = curl_exec($ch);
 $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);

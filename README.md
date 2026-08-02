@@ -70,10 +70,6 @@ git clone <repository_url> MedBD
 1. Open phpMyAdmin or your preferred MySQL client.
 2. Create a new database named `medbd`.
 3. Import the base database schema: `sql/medbd.sql`.
-4. Run the subsequent migration files located in the `sql/` directory in order:
-   * `migration_v2.sql` (Reviews and schema updates)
-   * `migration_v3.sql` (Stock management)
-   * `migration_v4.sql` (OTP Verification columns)
 
 ### Step 3: Configuration
 Open `config/constants.php` and update the following credentials to match your environment:
