@@ -18,7 +18,7 @@
                       $title=$row['title'];
                       $image_name=$row['image_name'];
                       ?>
-                    <a href="<?php echo SITEURL;?>category-product.php?category_id=<?php echo $id ?>" class="category-card">
+                    <a href="<?php echo SITEURL;?>catalog/category-product.php?category_id=<?php echo $id ?>" class="category-card">
                         <?php if($image_name==""): ?>
                             <div style="background: #eee; height: 100%; display:flex; align-items:center; justify-content:center;">No Image</div>
                         <?php else: ?>

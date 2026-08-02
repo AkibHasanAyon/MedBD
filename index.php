@@ -5,7 +5,7 @@
     <div class="container">
         <h1>Find Your Medical Essentials</h1>
         <p>Search thousands of medicines, health devices, and personal care products with fast delivery.</p>
-        <form action="<?php echo SITEURL;?>product-search.php" method="POST" class="search-box">
+        <form action="<?php echo SITEURL;?>catalog/search.php" method="POST" class="search-box">
             <input type="search" name="search" placeholder="Search for products, brands, or categories..." required>
             <button type="submit" name="submit" class="btn-search"><i class='bx bx-search'></i> Search</button>
         </form>
@@ -57,7 +57,7 @@
                     $title=$row['title'];
                     $image_name=$row['image_name'];
                     ?>
-                    <a href="<?php echo SITEURL;?>category-product.php?category_id=<?php echo $id; ?>" class="category-card">
+                    <a href="<?php echo SITEURL;?>catalog/category-product.php?category_id=<?php echo $id; ?>" class="category-card">
                         <?php if($image_name == ""): ?>
                             <div style="background: #eee; height: 100%; display:flex; align-items:center; justify-content:center;">No Image</div>
                         <?php else: ?>

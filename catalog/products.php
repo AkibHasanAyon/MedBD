@@ -3,7 +3,7 @@
 <!-- Hero / Search Section -->
 <section class="hero-section" style="padding: 4% 0;">
     <div class="container">
-        <form action="<?php echo SITEURL;?>product-search.php" method="POST" class="search-box">
+        <form action="<?php echo SITEURL;?>catalog/search.php" method="POST" class="search-box">
             <input type="search" name="search" placeholder="Search for products, brands, or categories..." required>
             <button type="submit" name="submit" class="btn-search"><i class='bx bx-search'></i> Search</button>
         </form>
