@@ -25,104 +25,82 @@
     <div class="container">
         <h2 class="text-center">Product Menu</h2>
 
-        <?php
+        <div class="product-grid">
+            <?php 
+                //SQL QUERY to get product based on search key word
+                $sql="SELECT * FROM tbl_product WHERE title LIKE  '%$search%' OR description LIKE '%$search%' ";
 
+                //Execute the Query 
+                $res=mysqli_query($conn, $sql);
+                //Count Rows
+                $count=mysqli_num_rows($res);
 
-               //SQL QUERY to get product based on search key word
-               $sql="SELECT * FROM tbl_product WHERE title LIKE  '%$search%' OR description LIKE '%$search%' ";
-
-               //Execute the Query 
-               $res=mysqli_query($conn, $sql);
-               //Count Rows
-               $count=mysqli_num_rows($res);
-
-               //check whether product available or not
-               if($count>0)
-               {
-                 //product AVailable 
-                 while($row=mysqli_fetch_assoc($res)) 
-                 {
-                     //get the values
-                     $id=$row['id'];
-                     $title=$row['title']; 
-                     $price=$row['price'];
-                     $description=$row['description'];
-                     $image_name=$row['image_name'];  
-                     ?>
-
-        <div class="product-menu-box">
-            <div class="product-menu-img">
-                <?php
-                     //check whether image is available or not
-                     if($image_name=="")
-                     {
-                         //Image Not Available
-                         echo "<div class='error'>Image Not Available.</div>";
-                     }
-                     else
-                     {
-                          //image Available
+                //check whether product available or not
+                if($count>0)
+                {
+                    //product AVailable 
+                    while($row=mysqli_fetch_assoc($res)) 
+                    {
+                        //get the values
+                        $id=$row['id'];
+                        $title=$row['title']; 
+                        $price=$row['price'];
+                        $description=$row['description'];
+                        $image_name=$row['image_name'];  
                         ?>
-                <img src="<?php echo SITEURL;?>images/product/<?php echo $image_name;?>" alt="  medicine "
-                    class="img-responsive img-curve">
-                <?php
-                      }
-                    ?>
 
-            </div>
+                        <div class="product-card">
+                            <div class="product-img">
+                                <?php if($image_name == ""): ?>
+                                    <div style="background: #eee; height: 100%; display:flex; align-items:center; justify-content:center;"><i class='bx bx-image text-muted' style="font-size:30px;"></i></div>
+                                <?php else: ?>
+                                    <img src="<?php echo SITEURL;?>images/product/<?php echo $image_name;?>" alt="<?php echo $title; ?>">
+                                <?php endif; ?>
+                            </div>
 
-            <div class="product-menu-desc">
-                <a href="<?php echo SITEURL; ?>catalog/detail.php?id=<?php echo $id; ?>" style="text-decoration:none;">
-                    <h4 style="color:#155e58;"><?php echo $title;?></h4>
-                </a>
-                
-                <?php
-                    // Get average rating
-                    $rate_sql = "SELECT AVG(rating) as avg_rate FROM tbl_review WHERE product_id=$id";
-                    $rate_res = mysqli_query($conn, $rate_sql);
-                    $rate_row = mysqli_fetch_assoc($rate_res);
-                    $avg_rate = $rate_row['avg_rate'] ? round($rate_row['avg_rate'], 1) : 0;
-                ?>
-                <div style="color: #ffb300; font-size: 14px; margin-bottom: 5px;">
-                    <?php 
-                        for($i=1; $i<=5; $i++) {
-                            if ($i <= round($avg_rate)) echo "★";
-                            else echo "☆";
-                        }
-                    ?>
-                    <span style="color:#888; font-size:12px;">(<?php echo $avg_rate; ?>)</span>
-                </div>
+                            <div class="product-info">
+                                <a href="<?php echo SITEURL; ?>catalog/detail.php?id=<?php echo $id; ?>">
+                                    <div class="product-title"><?php echo $title; ?></div>
+                                </a>
+                                
+                                <?php
+                                    $rate_sql = "SELECT AVG(rating) as avg_rate FROM tbl_review WHERE product_id=$id";
+                                    $rate_res = mysqli_query($conn, $rate_sql);
+                                    $rate_row = mysqli_fetch_assoc($rate_res);
+                                    $avg_rate = $rate_row['avg_rate'] ? round($rate_row['avg_rate'], 1) : 0;
+                                ?>
+                                <div style="color: #ffb300; font-size: 14px; margin-bottom: 8px;">
+                                    <?php 
+                                        for($i=1; $i<=5; $i++) {
+                                            if ($i <= round($avg_rate)) echo "★";
+                                            else echo "☆";
+                                        }
+                                    ?>
+                                    <span style="color: var(--text-muted); font-size: 12px; margin-left: 5px;">(<?php echo $avg_rate; ?>)</span>
+                                </div>
 
-                <p class="product-price">৳ <?php echo $price;?></p>
-                <p class="product-detail">
-                    <?php echo $description;?>
-                </p>
-                <br>
+                                <div class="product-price">৳<?php echo number_format($price, 2); ?></div>
+                                <div class="product-desc"><?php echo $description; ?></div>
+                                
+                                <div class="product-actions">
+                                    <a href="<?php echo SITEURL; ?>cart/add.php?product_id=<?php echo $id; ?>" class="btn-icon" title="Add to Cart">
+                                        <i class='bx bx-cart-add' style="font-size: 22px;"></i>
+                                    </a>
+                                    <a href="<?php echo SITEURL; ?>checkout/?product_id=<?php echo $id; ?>" class="btn-buy">Buy Now</a>
+                                </div>
+                            </div>
+                        </div>
 
-                <a href="<?php echo SITEURL; ?>cart/add.php?product_id=<?php echo $id; ?>" class="btn btn-primary" style="background:#155e58; border:none; margin-right:5px;">Add to Cart</a>
-                <a href="<?php echo SITEURL; ?>checkout/?product_id=<?php echo $id; ?>" class="btn btn-primary">Buy Now</a>
-            </div>
-        </div>
-
-        <?php
-
-                 }
-
-
-               }
-               else{
+                        <?php
+                    }
+                }
+                else
+                {
                     //product Not AVailable  
-                    echo"<div class='error'>product Not Found</div>";
-               }
-
-
-
+                    echo "<div class='error text-center'>Product Not Found</div>";
+                }
             ?>
-
-
-
-
-        <div class="clearfix"></div>
+        </div>
 
 
 
