@@ -47,14 +47,21 @@
                         $price=$row['price'];
                         $description=$row['description'];
                         $image_name=$row['image_name'];  
+                        $stock_qty = isset($row['stock_qty']) ? (int)$row['stock_qty'] : 0;
                         ?>
 
                         <div class="product-card">
-                            <div class="product-img">
+                            <div class="product-img" style="position: relative;">
+                                <?php if ($stock_qty <= 0): ?>
+                                    <div style="position: absolute; top: 10px; left: 10px; background: #dc2626; color: white; padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 700; z-index: 5; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">OUT OF STOCK</div>
+                                <?php elseif ($stock_qty <= 5): ?>
+                                    <div style="position: absolute; top: 10px; left: 10px; background: #d97706; color: white; padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 700; z-index: 5; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">ONLY <?php echo $stock_qty; ?> LEFT</div>
+                                <?php endif; ?>
+
                                 <?php if($image_name == ""): ?>
                                     <div style="background: #eee; height: 100%; display:flex; align-items:center; justify-content:center;"><i class='bx bx-image text-muted' style="font-size:30px;"></i></div>
                                 <?php else: ?>
-                                    <img src="<?php echo SITEURL;?>images/product/<?php echo $image_name;?>" alt="<?php echo $title; ?>">
+                                    <img src="<?php echo SITEURL;?>images/product/<?php echo $image_name;?>" alt="<?php echo $title; ?>" style="<?php echo ($stock_qty <= 0) ? 'opacity: 0.6; filter: grayscale(40%);' : ''; ?>">
                                 <?php endif; ?>
                             </div>
 
@@ -79,14 +86,23 @@
                                     <span style="color: var(--text-muted); font-size: 12px; margin-left: 5px;">(<?php echo $avg_rate; ?>)</span>
                                 </div>
 
-                                <div class="product-price">৳<?php echo number_format($price, 2); ?></div>
+                                <div class="product-price">
+                                    ৳<?php echo number_format($price, 2); ?>
+                                    <?php if ($stock_qty > 0 && $stock_qty <= 5): ?>
+                                        <span style="font-size: 12px; color: #d97706; font-weight: 600; float: right; margin-top: 3px;">⚡ Low Stock</span>
+                                    <?php endif; ?>
+                                </div>
                                 <div class="product-desc"><?php echo $description; ?></div>
                                 
                                 <div class="product-actions">
-                                    <a href="<?php echo SITEURL; ?>cart/add.php?product_id=<?php echo $id; ?>" class="btn-icon" title="Add to Cart">
-                                        <i class='bx bx-cart-add' style="font-size: 22px;"></i>
-                                    </a>
-                                    <a href="<?php echo SITEURL; ?>checkout/?product_id=<?php echo $id; ?>" class="btn-buy">Buy Now</a>
+                                    <?php if ($stock_qty > 0): ?>
+                                        <a href="<?php echo SITEURL; ?>cart/add.php?product_id=<?php echo $id; ?>" class="btn-icon" title="Add to Cart">
+                                            <i class='bx bx-cart-add' style="font-size: 22px;"></i>
+                                        </a>
+                                        <a href="<?php echo SITEURL; ?>checkout/?product_id=<?php echo $id; ?>" class="btn-buy">Buy Now</a>
+                                    <?php else: ?>
+                                        <span style="flex: 1; text-align: center; background: #e2e8f0; color: #64748b; padding: 10px; border-radius: 25px; font-weight: 600; font-size: 0.95rem; cursor: not-allowed;"><i class='bx bx-block' style="vertical-align: -2px;"></i> Out of Stock</span>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>

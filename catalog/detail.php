@@ -65,6 +65,26 @@ if ($rev_count > 0) {
                 <?php echo nl2br(htmlspecialchars($product['description'])); ?>
             </div>
 
+            <?php 
+                $stock_qty = (int)$product['stock_qty'];
+                if ($stock_qty <= 0): 
+            ?>
+                <div style="background: #fef2f2; color: #dc2626; border: 1px solid #f87171; padding: 10px 15px; border-radius: 6px; margin-bottom: 20px; font-size: 15px; font-weight: 600; display: inline-flex; align-items: center; gap: 8px;">
+                    <i class='bx bx-error-circle' style="font-size: 20px;"></i> Currently Out of Stock
+                </div>
+                <br>
+            <?php elseif ($stock_qty <= 5): ?>
+                <div style="background: #fffbeb; color: #d97706; border: 1px solid #fcd34d; padding: 10px 15px; border-radius: 6px; margin-bottom: 20px; font-size: 15px; font-weight: 600; display: inline-flex; align-items: center; gap: 8px;">
+                    <i class='bx bx-error' style="font-size: 20px;"></i> Hurry! Only <?php echo $stock_qty; ?> unit(s) left in stock
+                </div>
+                <br>
+            <?php else: ?>
+                <div style="background: #f0fdf4; color: #16a34a; border: 1px solid #86efac; padding: 10px 15px; border-radius: 6px; margin-bottom: 20px; font-size: 15px; font-weight: 600; display: inline-flex; align-items: center; gap: 8px;">
+                    <i class='bx bx-check-circle' style="font-size: 20px;"></i> In Stock & Ready to Ship
+                </div>
+                <br>
+            <?php endif; ?>
+
             <?php if ($product['requires_prescription'] == 'Yes'): ?>
                 <div style="background: #ffebee; color: #c62828; padding: 10px 15px; border-radius: 4px; margin-bottom: 20px; font-size: 14px; display: inline-block;">
                     <i class='bx bx-plus-medical'></i> Prescription Required
@@ -72,9 +92,13 @@ if ($rev_count > 0) {
                 <br>
             <?php endif; ?>
 
-            <div style="display: flex; gap: 15px;">
-                <a href="<?php echo SITEURL; ?>cart/add.php?product_id=<?php echo $product_id; ?>" style="padding: 15px 30px; background: #155e58; color: white; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 16px;">Add to Cart</a>
-                <a href="<?php echo SITEURL; ?>checkout/?product_id=<?php echo $product_id; ?>" style="padding: 15px 30px; background: #15c293; color: white; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 16px;">Buy Now</a>
+            <div style="display: flex; gap: 15px; align-items: center;">
+                <?php if ($stock_qty > 0): ?>
+                    <a href="<?php echo SITEURL; ?>cart/add.php?product_id=<?php echo $product_id; ?>" style="padding: 15px 30px; background: #155e58; color: white; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 16px;">Add to Cart</a>
+                    <a href="<?php echo SITEURL; ?>checkout/?product_id=<?php echo $product_id; ?>" style="padding: 15px 30px; background: #15c293; color: white; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 16px;">Buy Now</a>
+                <?php else: ?>
+                    <span style="padding: 15px 30px; background: #94a3b8; color: #f8fafc; border-radius: 8px; font-weight: bold; font-size: 16px; cursor: not-allowed;"><i class='bx bx-block' style="vertical-align: -2px;"></i> Out of Stock</span>
+                <?php endif; ?>
                 <a href="<?php echo SITEURL; ?>wishlist/add.php?product_id=<?php echo $product_id; ?>" style="padding: 15px 20px; background: #fdfdfd; color: #e74c3c; border: 2px solid #e74c3c; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 16px;" title="Add to Wishlist"><i class='bx bxs-heart'></i></a>
             </div>
         </div>
