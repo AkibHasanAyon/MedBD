@@ -1,113 +1,124 @@
-# MedBD — Online Medical E-Commerce Platform
+# 💊 MedBD — Online Medical E-Commerce Platform
 
-![MedBD Logo](images/MedBdLogo.png)
+![PHP](https://img.shields.io/badge/PHP-8.0%2B-777BB4?style=for-the-badge&logo=php&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-00758F?style=for-the-badge&logo=mysql&logoColor=white)
+![Stripe](https://img.shields.io/badge/Stripe-API-635BFF?style=for-the-badge&logo=stripe&logoColor=white)
+![Status](https://img.shields.io/badge/Status-Production--Ready-success?style=for-the-badge)
 
-**MedBD** is a full-stack, web-based medical e-commerce platform designed to allow customers to seamlessly browse, search, and order medicines, healthcare devices, baby care items, vitamins, and personal care products. The platform includes a comprehensive, secure admin dashboard to manage the catalog, inventory, and orders.
+**MedBD** is a full-featured medical e-commerce platform designed to enable customers to browse, search, and order pharmaceuticals, diagnostic health devices, baby care essentials, vitamins, and healthcare supplies.
 
-The goal of this project is to provide a complete, secure, and responsive online pharmacy system that mirrors real-world e-commerce platforms.
+The project incorporates a domain-driven architectural refactoring, secure customer authentication with email OTP verification, automated order invoicing, Stripe card checkout, and an administrative inventory control dashboard.
 
-## 🚀 Features
+---
 
-### Customer Experience
-* **Secure Authentication**: Registration and Login with bcrypt password hashing. Includes **Email OTP Verification** to ensure genuine accounts, alongside a secure Password Reset flow.
-* **Product Catalog**: Browse products by category or search by keyword.
-* **Shopping Cart & Wishlist**: Persistent cart and wishlist tracking tied to the user's account.
-* **Checkout Process**: Secure checkout flow with **Stripe API** integration for payments. Features stock validation to prevent ordering out-of-stock items.
-* **Order Tracking**: Customers can view their past orders and track current delivery statuses.
-* **Email Notifications**: Automated order confirmation emails sent via **PHPMailer**.
-* **Verified Reviews**: Customers can only leave reviews on products they have successfully purchased and received (status marked as "Delivered").
+## 🌟 Key Features
 
-### Admin Dashboard
-* **Catalog Management**: Add, update, and delete categories and products.
-* **Order Management**: View incoming orders, update order statuses (Ordered, On Delivery, Delivered, Cancelled), and manage customer details.
-* **Stock & Inventory Control**: Track product stock quantities. The dashboard alerts admins of Low Stock, and the system automatically deducts stock upon successful checkouts.
-* **Admin Management**: Create and manage sub-admins.
+### 👤 Customer Experience
+* **Secure Authentication**: Customer registration and login using bcrypt password hashing. Includes **Email OTP Verification** (via PHPMailer) to prevent dummy registrations and a secure password reset workflow.
+* **Smart Catalog & Live Search**: Category filtering, instant keyword search, and live product autosuggest.
+* **Cart & Wishlist**: Persistent cart and wishlist tracking tied to the customer's account session.
+* **Stripe Checkout**: Integrated card payment processing via Stripe API with stock availability validation prior to payment capture.
+* **Automated Email Notifications**: HTML invoices and order confirmation receipts dispatched instantly via SMTP.
+* **Verified Purchase Reviews**: Only authenticated customers who have received a completed order (`status = 'Delivered'`) are permitted to submit product reviews and star ratings.
+* **Order Tracking (`my-orders.php`)**: Full real-time delivery status tracking (`Ordered` $\to$ `On Delivery` $\to$ `Delivered` $\to$ `Cancelled`).
 
-## 📁 Project Architecture (Domain-Driven)
+### 🛠️ Administrative Operations (`admin/`)
+* **Catalog Management**: Add, update, feature, or deactivate product categories and individual products.
+* **Inventory & Low-Stock Alerts**: Live stock counter that deducts quantities upon confirmed checkout and surfaces low-inventory warnings.
+* **Order Processing**: View incoming order queues, inspect recipient delivery information, and update dispatch milestones.
+* **Role Management**: Add, manage, and update sub-administrator credentials.
 
-The codebase has been refactored from a flat structure into a feature-based / domain-driven architecture for better maintainability:
+---
+
+## 🏗️ Domain-Driven Project Architecture
 
 ```text
 MedBD/
-├── admin/               # Admin dashboard and management scripts
+├── admin/               # Admin dashboard and catalog/order management
 ├── cart/                # Shopping cart UI, add, update, and remove logic
-├── catalog/             # Product listings, categories, search, reviews
+├── catalog/             # Product listings, categories, search, verified reviews
 ├── checkout/            # Checkout flow, Stripe processing, and order emails
 ├── config/              # Core configurations (DB connection, Mailer helper)
-├── customer/            # User authentication (Login, Register, OTP, Profile)
+├── customer/            # Customer auth (Login, Register, OTP verification, Profile)
 ├── css/                 # Global styling and specific component stylesheets
-├── images/              # Static assets (logos, products, categories, favicon)
-├── pages/               # Static and informational pages (Contact)
-├── partials-front/      # Reusable frontend components (Header, Footer, Menu)
-├── sql/                 # Database schema and sequential migrations
-└── wishlist/            # Wishlist UI and logic
+├── images/              # Static assets (logos, products, categories, banner)
+├── pages/               # Informational pages (Contact Us)
+├── partials-front/      # Reusable UI partials (Header, Navigation Menu, Footer)
+├── PHPMailer/           # SMTP email mailing library
+├── sql/                 # Database schema dump (medbd.sql)
+├── wishlist/            # Customer wishlist UI and handlers
+└── Code_explain/        # In-depth architectural documentation
+    ├── admin_panel.md
+    ├── config_and_index.md
+    ├── customer_auth.md
+    └── ecommerce_core.md
 ```
+
+---
 
 ## 🛠️ Technology Stack
 
-* **Frontend**: HTML5, Vanilla CSS, BoxIcons for iconography.
-* **Backend**: PHP (Procedural).
-* **Database**: MySQL.
-* **Integrations**: 
-  * Stripe API (Payment Processing)
-  * PHPMailer (SMTP Email Sending)
+* **Frontend**: HTML5, Vanilla CSS3, BoxIcons for UI iconography.
+* **Backend**: PHP 8.0+ (Procedural modular architecture).
+* **Database**: MySQL (Relational schema with normalized tables).
+* **Payment Gateway**: Stripe API (Stripe Checkout / Payment Intents).
+* **Email System**: PHPMailer via SMTP.
+
+---
 
 ## ⚙️ Installation & Setup
 
 ### Prerequisites
-* A local server environment like XAMPP, LAMPP, or WAMP.
-* PHP 8.0+
-* MySQL Database
+* Local PHP & MySQL server (XAMPP, WAMP, or LAMP).
+* PHP **8.0** or later.
+* MySQL / MariaDB.
 
-### Step 1: Clone the Repository
-Clone the repository into your local server's document root (e.g., `/opt/lampp/htdocs/` or `C:\xampp\htdocs\`).
-
-```bash
-git clone <repository_url> MedBD
+### Step 1: Clone or Copy Project
+Place the `MedBD` directory in your web server's public document root:
+```text
+C:\xampp\htdocs\MedBD\
 ```
 
-### Step 2: Database Setup
-1. Open phpMyAdmin or your preferred MySQL client.
-2. Create a new database named `medbd`.
-3. Import the base database schema: `sql/medbd.sql`.
-
-### Step 3: Configuration
-Open `config/constants.php` and update the following credentials to match your environment:
-
-1. **Database Credentials**:
-   ```php
-   define('LOCALHOST', 'localhost');
-   define('DB_USERNAME', 'root');
-   define('DB_PASSWORD', '');
-   define('DB_NAME', 'medbd');
+### Step 2: Database Initialization
+1. Open **phpMyAdmin** (`http://localhost/phpmyadmin`).
+2. Create a database named `medbd`.
+3. Import the database dump located at:
+   ```text
+   MedBD/sql/medbd.sql
    ```
 
-2. **Site URL**:
-   Ensure `SITEURL` points exactly to your local directory (include the trailing slash).
-   ```php
-   define('SITEURL', 'http://localhost/MedBD/');
-   ```
+### Step 3: Configure Environment Credentials
+Open [`config/constants.php`](file:///C:/Users/HP/Downloads/Ayon/MedBD/config/constants.php) and set your local credentials:
 
-3. **Stripe API Keys**:
-   Add your Stripe test keys for payment processing.
-   ```php
-   define('STRIPE_PUBLISHABLE_KEY', 'your_publishable_key');
-   define('STRIPE_SECRET_KEY', 'your_secret_key');
-   ```
+```php
+// Database Configuration
+define('LOCALHOST', 'localhost');
+define('DB_USERNAME', 'root');
+define('DB_PASSWORD', '');
+define('DB_NAME', 'medbd');
 
-4. **SMTP Credentials (PHPMailer)**:
-   Add your SMTP details to enable OTP and Order Confirmation emails. If using Gmail, you will need to generate an App Password.
-   ```php
-   define('SMTP_USERNAME', 'your_email@gmail.com');
-   define('SMTP_PASSWORD', 'your_app_password');
-   ```
+// Base Site URL (must end with a trailing slash)
+define('SITEURL', 'http://localhost/MedBD/');
+
+// Stripe API Credentials (test keys)
+define('STRIPE_PUBLISHABLE_KEY', 'pk_test_...');
+define('STRIPE_SECRET_KEY', 'sk_test_...');
+
+// SMTP Email Credentials (for OTP and Invoices)
+define('SMTP_USERNAME', 'your_email@gmail.com');
+define('SMTP_PASSWORD', 'your_app_password');
+```
 
 ### Step 4: Run the Application
-Open your browser and navigate to:
-`http://localhost/MedBD/`
+* **Storefront**: Navigate to `http://localhost/MedBD/`
+* **Admin Dashboard**: Navigate to `http://localhost/MedBD/admin/`
 
-To access the admin dashboard:
-`http://localhost/MedBD/admin/`
+---
 
-## 🛡️ License & Academic Context
-This project was developed as a comprehensive semester project to demonstrate a feasible, secure, and modern approach to building an online medical e-commerce platform.
+## 📚 Technical Documentation
+Detailed architectural breakdowns are available in the [`Code_explain/`](file:///C:/Users/HP/Downloads/Ayon/MedBD/Code_explain/) directory:
+* [`customer_auth.md`](file:///C:/Users/HP/Downloads/Ayon/MedBD/Code_explain/customer_auth.md) — Authentication, OTP lifecycle, and password resets.
+* [`ecommerce_core.md`](file:///C:/Users/HP/Downloads/Ayon/MedBD/Code_explain/ecommerce_core.md) — Cart calculations, checkout, and inventory decrement logic.
+* [`admin_panel.md`](file:///C:/Users/HP/Downloads/Ayon/MedBD/Code_explain/admin_panel.md) — Administrative workflows and role-based access.
+* [`config_and_index.md`](file:///C:/Users/HP/Downloads/Ayon/MedBD/Code_explain/config_and_index.md) — Core configurations and entry routing.
+
